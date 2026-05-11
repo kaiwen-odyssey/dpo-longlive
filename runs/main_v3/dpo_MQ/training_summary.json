@@ -1,0 +1,14 @@
+{
+  "config": {
+    "beta": 500, "lr": 2e-5, "grad_accum": 4,
+    "anchor_alpha": 1.0, "min_gap": 0.2,
+    "max_steps": 400, "training_pool": 473,
+    "step_pace_min": 1.0
+  },
+  "final_window_last_20": {"loss": 1.316, "margin": 0.438, "acc": 0.62},
+  "window_steps_50_150":   {"loss": 1.351, "margin": 0.317, "acc": 0.56},
+  "window_steps_150_250":  {"loss": 1.481, "margin": 0.353, "acc": 0.57},
+  "window_steps_250_350":  {"loss": 1.258, "margin": 0.323, "acc": 0.61},
+  "overall_avg_acc": 0.57,
+  "margin_sign_pos": 58, "margin_sign_neg": 24, "logged_points": 83
+}

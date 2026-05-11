@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+
+# Editor / OS
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Claude local state
+.claude/
+
+# Model weights & external assets (downloaded separately)
+assets/
+wan_models
+
+# Data: keep prompt files + pair index, ignore generated pair videos/latents
+data/pairs/*/
+data/eval/
+
+# Training artifacts: keep JSON logs, ignore large weights/videos
+runs/**/*.pt
+runs/**/*.pth
+runs/**/*.safetensors
+runs/**/*.bin
+runs/**/*.mp4
+runs/**/*.avi
+runs/**/*.webm
+
+# Logs
+logs/
+
+# Backups
+*.bak
+*.orig
+
+# LaTeX intermediates
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/missfont.log
+
+# Paper PDF variants (only main.pdf is kept)
+paper/main_compressed.pdf
+paper/main_e.pdf
+paper/main_s.pdf
+paper/main_tiny.pdf
+paper/main_screen.pdf
+paper/main_nofig.*
+paper/paper.pdf
+paper/paper.html

@@ -1,0 +1,308 @@
+{
+  "ablation_dpo_MQ_lr1e-07": [
+    {
+      "dpo_loss": 0.6931471824645996,
+      "dpo_margin": 0.0,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0,
+      "rejected_logp_diff": 0.0,
+      "grad_norm": 288.0,
+      "step": 1,
+      "mem_gb": 64.735346688
+    },
+    {
+      "dpo_loss": 0.7373009579522269,
+      "dpo_margin": -0.07940057132925306,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -2.4206936359405518e-05,
+      "rejected_logp_diff": 7.553292172295707e-06,
+      "grad_norm": 572.0,
+      "step": 2,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8093319705554417,
+      "dpo_margin": -0.21341522676604135,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.00011073957596506392,
+      "rejected_logp_diff": -2.5373484407152447e-05,
+      "grad_norm": 424.0,
+      "step": 3,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.75240444285529,
+      "dpo_margin": -0.11075188113110405,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -2.1931715309619904e-05,
+      "rejected_logp_diff": 2.2369037781442914e-05,
+      "grad_norm": 632.0,
+      "step": 4,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8776077883584159,
+      "dpo_margin": -0.2926641213042395,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -8.215755224227905e-05,
+      "rejected_logp_diff": 3.4908098833901544e-05,
+      "grad_norm": 1368.0,
+      "step": 5,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7188839060919625,
+      "dpo_margin": -0.05012910280908857,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": 8.621386119297572e-07,
+      "rejected_logp_diff": 2.0913779735565186e-05,
+      "grad_norm": 342.0,
+      "step": 6,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.713766007050903,
+      "dpo_margin": 1.3228346109390259,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.00012453432594026838,
+      "rejected_logp_diff": -0.0006536681737218584,
+      "grad_norm": 916.0,
+      "step": 7,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8142302887780326,
+      "dpo_margin": -0.1735240135874067,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": 5.963657583509173e-05,
+      "rejected_logp_diff": 0.0001290461846760341,
+      "grad_norm": 2240.0,
+      "step": 8,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7053449366773877,
+      "dpo_margin": 0.002120756677218846,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.00010563752480915614,
+      "rejected_logp_diff": -0.00010648582662854875,
+      "grad_norm": 1192.0,
+      "step": 9,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8045780658721924,
+      "dpo_margin": -0.19325475980128562,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -5.6428568703787665e-05,
+      "rejected_logp_diff": 2.0873333726610455e-05,
+      "grad_norm": 1064.0,
+      "step": 10,
+      "mem_gb": 70.34732544
+    }
+  ],
+  "ablation_dpo_MQ_lr1e-06": [
+    {
+      "dpo_loss": 0.6931471824645996,
+      "dpo_margin": 0.0,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0,
+      "rejected_logp_diff": 0.0,
+      "grad_norm": 362.0,
+      "step": 1,
+      "mem_gb": 64.720666624
+    },
+    {
+      "dpo_loss": 0.7054174289223738,
+      "dpo_margin": 0.8411027086632592,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.0003526125635419573,
+      "rejected_logp_diff": -0.0006890536418982915,
+      "grad_norm": 16384.0,
+      "step": 2,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7620876261166164,
+      "dpo_margin": -0.12059097524200167,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.0001852397939988545,
+      "rejected_logp_diff": -0.00013700340475354875,
+      "grad_norm": 6176.0,
+      "step": 3,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8283573303903852,
+      "dpo_margin": -0.24916238231318338,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 4.834362438746861e-06,
+      "rejected_logp_diff": 0.00010449931557689394,
+      "grad_norm": 199.0,
+      "step": 4,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7053196089608329,
+      "dpo_margin": -0.016761145421436856,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -6.945005484989711e-07,
+      "rejected_logp_diff": 6.0099576200757705e-06,
+      "grad_norm": 338.0,
+      "step": 5,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.6329374574124813,
+      "dpo_margin": 0.434855797461101,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": 0.0001297656978879656,
+      "rejected_logp_diff": -4.417662109647479e-05,
+      "grad_norm": 298.0,
+      "step": 6,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.6623137167521885,
+      "dpo_margin": 0.07185552801404681,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -1.0841659137180873e-05,
+      "rejected_logp_diff": -3.95838703427996e-05,
+      "grad_norm": 298.0,
+      "step": 7,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8321055259023394,
+      "dpo_margin": -0.15858295559883118,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -4.9212149211338586e-05,
+      "rejected_logp_diff": 1.4221029622214182e-05,
+      "grad_norm": 1960.0,
+      "step": 8,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7196952360016959,
+      "dpo_margin": 0.04391983364309583,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -1.6332737037113736e-05,
+      "rejected_logp_diff": -3.390067390033177e-05,
+      "grad_norm": 7392.0,
+      "step": 9,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.6047056828226361,
+      "dpo_margin": 0.2286115831562451,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": 3.091259194271905e-06,
+      "rejected_logp_diff": -8.835337523903166e-05,
+      "grad_norm": 768.0,
+      "step": 10,
+      "mem_gb": 70.34732544
+    }
+  ],
+  "ablation_dpo_MQ_lr1e-05": [
+    {
+      "dpo_loss": 0.6931471824645996,
+      "dpo_margin": 0.0,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0,
+      "rejected_logp_diff": 0.0,
+      "grad_norm": 2160.0,
+      "step": 1,
+      "mem_gb": 64.720666624
+    },
+    {
+      "dpo_loss": 12.104967098150935,
+      "dpo_margin": 4.8589800000190735,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": 0.0032226411359650747,
+      "rejected_logp_diff": 0.0012790491538388388,
+      "grad_norm": 5600.0,
+      "step": 2,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.5213880751412685,
+      "dpo_margin": 0.4493377889905657,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": 0.0006390990955489022,
+      "rejected_logp_diff": 0.0004593639501503536,
+      "grad_norm": 588.0,
+      "step": 3,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.739885867839413,
+      "dpo_margin": 0.9812780490943364,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -4.470029047557286e-05,
+      "rejected_logp_diff": -0.0004372115113905498,
+      "grad_norm": 213.0,
+      "step": 4,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.5280761034740662,
+      "dpo_margin": 5.757738181522915,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": 0.0008881996784891401,
+      "rejected_logp_diff": -0.001414895589862551,
+      "grad_norm": 233.0,
+      "step": 5,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.6664650525365556,
+      "dpo_margin": -2.373012602329254,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.0025583824941090177,
+      "rejected_logp_diff": -0.0016091774616922652,
+      "grad_norm": 868.0,
+      "step": 6,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.221161937286005,
+      "dpo_margin": -2.640384486743382,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.003213471599987575,
+      "rejected_logp_diff": -0.002157317740576608,
+      "grad_norm": 908.0,
+      "step": 7,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.23135325850671506,
+      "dpo_margin": 14.349048797573362,
+      "dpo_accuracy": 1.0,
+      "chosen_logp_diff": 0.004451334476470947,
+      "rejected_logp_diff": -0.0012882852128573827,
+      "grad_norm": 137.0,
+      "step": 8,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.292579612561634,
+      "dpo_margin": -3.7637873015233447,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": 2.181849309376308e-05,
+      "rejected_logp_diff": 0.0015273333660193852,
+      "grad_norm": 1856.0,
+      "step": 9,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.1845989415812346,
+      "dpo_margin": 0.3098850633416857,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.001182979571499995,
+      "rejected_logp_diff": -0.0013069336169532367,
+      "grad_norm": 13504.0,
+      "step": 10,
+      "mem_gb": 70.34732544
+    }
+  ]
+}

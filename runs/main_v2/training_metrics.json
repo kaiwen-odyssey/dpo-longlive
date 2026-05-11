@@ -1,0 +1,1814 @@
+{
+  "dpo_MQ": [
+    {
+      "dpo_loss": 0.6931471824645996,
+      "dpo_margin": 0.0,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0,
+      "rejected_logp_diff": 0.0,
+      "grad_norm": 151.0,
+      "step": 1,
+      "mem_gb": 64.735346688
+    },
+    {
+      "dpo_loss": 1.123223345893036,
+      "dpo_margin": 0.7976758767451558,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.02764659108860152,
+      "rejected_logp_diff": -0.03083729451256139,
+      "grad_norm": 89.0,
+      "step": 2,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.7431727136884416,
+      "dpo_margin": -2.309304217142718,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.0071984029241970605,
+      "rejected_logp_diff": 0.0020388135952608927,
+      "grad_norm": 1004.0,
+      "step": 3,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.5072053032261985,
+      "dpo_margin": 0.5735355913639069,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.00041914252298218865,
+      "rejected_logp_diff": -0.002713284854378019,
+      "grad_norm": 42.0,
+      "step": 4,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.7814553853656565,
+      "dpo_margin": -0.21240276523998805,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.04431613428252084,
+      "rejected_logp_diff": -0.04346652328968048,
+      "grad_norm": 58.5,
+      "step": 5,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.9749468096664974,
+      "dpo_margin": -0.35222731956413816,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.008977450962577547,
+      "rejected_logp_diff": -0.007568541648132461,
+      "grad_norm": 40.75,
+      "step": 6,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.3350939601659775,
+      "dpo_margin": -0.013811788388660975,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.04091713045324598,
+      "rejected_logp_diff": -0.04086188333375113,
+      "grad_norm": 146.0,
+      "step": 7,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.7547087190406663,
+      "dpo_margin": -1.2269778336797441,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.044129847415855954,
+      "rejected_logp_diff": -0.03922193603856223,
+      "grad_norm": 72.0,
+      "step": 8,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.76304053703622,
+      "dpo_margin": 1.5749801737921578,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.0759508019047124,
+      "rejected_logp_diff": -0.08225072281701225,
+      "grad_norm": 252.0,
+      "step": 9,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.5627033806603919,
+      "dpo_margin": 2.7409105513777052,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.008072531382952417,
+      "rejected_logp_diff": -0.01903617408658777,
+      "grad_norm": 17.75,
+      "step": 10,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.801351513181414,
+      "dpo_margin": -0.1497564102922167,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.009119360308562006,
+      "rejected_logp_diff": -0.008520334692937987,
+      "grad_norm": 148.0,
+      "step": 11,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.8133127819387256,
+      "dpo_margin": -0.06980586051940918,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.05135675093957356,
+      "rejected_logp_diff": -0.05107752765927996,
+      "grad_norm": 185.0,
+      "step": 12,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.701460652594376,
+      "dpo_margin": -2.3380070328712463,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.046562770647662025,
+      "rejected_logp_diff": -0.03721074227775846,
+      "grad_norm": 1448.0,
+      "step": 13,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.243698596954346,
+      "dpo_margin": -4.193468877247402,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.026702774422509328,
+      "rejected_logp_diff": -0.009928899151938302,
+      "grad_norm": 524.0,
+      "step": 14,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.4787551132696017,
+      "dpo_margin": 3.4889093041419983,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.03259853273630142,
+      "rejected_logp_diff": -0.04655416948454721,
+      "grad_norm": 1632.0,
+      "step": 15,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.2053606339863367,
+      "dpo_margin": -0.7738574658121381,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.020944304232086455,
+      "rejected_logp_diff": -0.017848874309233258,
+      "grad_norm": 56.75,
+      "step": 16,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.2423644192250711,
+      "dpo_margin": -0.3418533205986023,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.030819585812943324,
+      "rejected_logp_diff": -0.029452172507132803,
+      "grad_norm": 49.25,
+      "step": 17,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.1413730468068892,
+      "dpo_margin": 2.789827823638916,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.03196541007075991,
+      "rejected_logp_diff": -0.04312472151858466,
+      "grad_norm": 127.0,
+      "step": 18,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.4224689869733993,
+      "dpo_margin": 2.8554884578500475,
+      "dpo_accuracy": 1.0,
+      "chosen_logp_diff": -0.018499067851475308,
+      "rejected_logp_diff": -0.029921021844659532,
+      "grad_norm": 29.875,
+      "step": 19,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.1948489546775818,
+      "dpo_margin": -0.6999108056936946,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.00718015299311706,
+      "rejected_logp_diff": -0.004380509789500918,
+      "grad_norm": 41.75,
+      "step": 20,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 5.573019206523895,
+      "dpo_margin": -4.88570807661329,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.04279296313013349,
+      "rejected_logp_diff": -0.023250130138226917,
+      "grad_norm": 1012.0,
+      "step": 21,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.4771828862638878,
+      "dpo_margin": 1.8742426804133825,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.010247327387332916,
+      "rejected_logp_diff": -0.017744297959974835,
+      "grad_norm": 23.5,
+      "step": 22,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.6308212578296661,
+      "dpo_margin": 0.14518001888479506,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.009320848222289766,
+      "rejected_logp_diff": -0.009901568293571472,
+      "grad_norm": 25.375,
+      "step": 23,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.608793386391231,
+      "dpo_margin": 0.1804152759058135,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.007263023938451495,
+      "rejected_logp_diff": -0.007984685046332223,
+      "grad_norm": 18.25,
+      "step": 24,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 3.8042587382542923,
+      "dpo_margin": 5.803989487034934,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.01178635231086186,
+      "rejected_logp_diff": -0.03500231036118099,
+      "grad_norm": 486.0,
+      "step": 25,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 6.3675886158432276,
+      "dpo_margin": -5.749047815799713,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.01920746053968157,
+      "rejected_logp_diff": 0.0037887303956917356,
+      "grad_norm": 177.0,
+      "step": 26,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.908272500549044,
+      "dpo_margin": -4.507241777011326,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.009900354913302831,
+      "rejected_logp_diff": 0.008128612169197627,
+      "grad_norm": 148.0,
+      "step": 27,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 8.44717198417389,
+      "dpo_margin": -7.413878121546337,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.012490111802305495,
+      "rejected_logp_diff": 0.01716540115220206,
+      "grad_norm": 676.0,
+      "step": 28,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.5399568591799055,
+      "dpo_margin": -1.227947352187974,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.002899124154022762,
+      "rejected_logp_diff": 0.00201266525047166,
+      "grad_norm": 66.5,
+      "step": 29,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8851172027311155,
+      "dpo_margin": 0.07492909899779729,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.003446515915649278,
+      "rejected_logp_diff": -0.003746232283966882,
+      "grad_norm": 49.25,
+      "step": 30,
+      "mem_gb": 70.34732544
+    }
+  ],
+  "dpo_TA": [
+    {
+      "dpo_loss": 0.6931471824645996,
+      "dpo_margin": 0.0,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0,
+      "rejected_logp_diff": 0.0,
+      "grad_norm": 66.0,
+      "step": 1,
+      "mem_gb": 64.720666624
+    },
+    {
+      "dpo_loss": 0.49775316938757896,
+      "dpo_margin": 0.9993150111820016,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.0019804303135190693,
+      "rejected_logp_diff": -0.005977690352925232,
+      "grad_norm": 17.5,
+      "step": 2,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 3.5908668843103277,
+      "dpo_margin": -1.2345308044127055,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.08254487413380827,
+      "rejected_logp_diff": -0.07760675065219402,
+      "grad_norm": 380.0,
+      "step": 3,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.8083680257541428,
+      "dpo_margin": 7.942518200193133,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.35620617999562193,
+      "rejected_logp_diff": -0.3879762531391212,
+      "grad_norm": 1424.0,
+      "step": 4,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 8.285460148538862,
+      "dpo_margin": -7.887775725552014,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.07521658071449824,
+      "rejected_logp_diff": -0.043665477207728794,
+      "grad_norm": 1224.0,
+      "step": 5,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.6766842901706696,
+      "dpo_margin": -1.1303391448621238,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.06736123162720885,
+      "rejected_logp_diff": -0.06283987499773502,
+      "grad_norm": 308.0,
+      "step": 6,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.466053754091263,
+      "dpo_margin": -1.9801919588020869,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.05191230773925781,
+      "rejected_logp_diff": -0.043991540159497945,
+      "grad_norm": 920.0,
+      "step": 7,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8800583737237113,
+      "dpo_margin": -0.3074678970234735,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.010843750621591295,
+      "rejected_logp_diff": -0.009613879024982452,
+      "grad_norm": 43.75,
+      "step": 8,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 5.426779227597373,
+      "dpo_margin": -4.861911668309143,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.1244352183171681,
+      "rejected_logp_diff": -0.1049875718142305,
+      "grad_norm": 356.0,
+      "step": 9,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.5977788094247185,
+      "dpo_margin": 1.8136766723224096,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.023774280079773495,
+      "rejected_logp_diff": -0.031028987041541507,
+      "grad_norm": 392.0,
+      "step": 10,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.562940410205296,
+      "dpo_margin": -4.309868659291949,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.07157398121697563,
+      "rejected_logp_diff": -0.054334506924663274,
+      "grad_norm": 464.0,
+      "step": 11,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.526284547788756,
+      "dpo_margin": -3.6308105247361318,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.08201178695474352,
+      "rejected_logp_diff": -0.06748854475361961,
+      "grad_norm": 696.0,
+      "step": 12,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.11714590127979006,
+      "dpo_margin": 2.201350382396153,
+      "dpo_accuracy": 1.0,
+      "chosen_logp_diff": -0.02022883402449744,
+      "rejected_logp_diff": -0.029034235647746494,
+      "grad_norm": 20.625,
+      "step": 13,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.0636383124760218,
+      "dpo_margin": -0.5818232851369041,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.01597161085477897,
+      "rejected_logp_diff": -0.013644317697201456,
+      "grad_norm": 49.0,
+      "step": 14,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8800448306969234,
+      "dpo_margin": 0.17467967527253286,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.061714982347829,
+      "rejected_logp_diff": -0.06241370098931449,
+      "grad_norm": 121.5,
+      "step": 15,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.644118214125878,
+      "dpo_margin": 0.8421053673539843,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.03717325521366937,
+      "rejected_logp_diff": -0.04054167653833117,
+      "grad_norm": 42.25,
+      "step": 16,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.9361059019159127,
+      "dpo_margin": 0.6731397190264293,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.04439654414142881,
+      "rejected_logp_diff": -0.04708910307713917,
+      "grad_norm": 103.0,
+      "step": 17,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 11.932409045951706,
+      "dpo_margin": -11.4401975103787,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.08444132336548396,
+      "rejected_logp_diff": -0.03868053214890616,
+      "grad_norm": 852.0,
+      "step": 18,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.9108847911868777,
+      "dpo_margin": -0.226890395794596,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.02689769970519202,
+      "rejected_logp_diff": -0.02599013809646879,
+      "grad_norm": 55.0,
+      "step": 19,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7862904702446291,
+      "dpo_margin": 0.5017242431640625,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.02614996475832803,
+      "rejected_logp_diff": -0.028156861662864685,
+      "grad_norm": 41.75,
+      "step": 20,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.1167098354703144,
+      "dpo_margin": 5.081963828631809,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.05654979550412723,
+      "rejected_logp_diff": -0.07687765040567943,
+      "grad_norm": 51.25,
+      "step": 21,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 3.299242484077249,
+      "dpo_margin": 2.479780537741525,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.06358828608478818,
+      "rejected_logp_diff": -0.07350740901061467,
+      "grad_norm": 159.0,
+      "step": 22,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.9041593986205823,
+      "dpo_margin": -0.29785127299172537,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.13451615667768888,
+      "rejected_logp_diff": -0.13332475189651763,
+      "grad_norm": 217.0,
+      "step": 23,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.953678214373732,
+      "dpo_margin": 0.46428797926221577,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.0467061772942543,
+      "rejected_logp_diff": -0.048563329236848016,
+      "grad_norm": 612.0,
+      "step": 24,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.5890553678785052,
+      "dpo_margin": 0.257573626935482,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.017370912645544325,
+      "rejected_logp_diff": -0.018401207136256353,
+      "grad_norm": 24.0,
+      "step": 25,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 5.981489249218261,
+      "dpo_margin": -3.5269657714026317,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.05135005805641413,
+      "rejected_logp_diff": -0.03724219463765621,
+      "grad_norm": 1064.0,
+      "step": 26,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.4250010132257427,
+      "dpo_margin": -0.5809596947261265,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.01738295384815761,
+      "rejected_logp_diff": -0.015059115099055427,
+      "grad_norm": 159.0,
+      "step": 27,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 6.75703966324675,
+      "dpo_margin": -4.93944682979158,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.08002412931195327,
+      "rejected_logp_diff": -0.060266342014074326,
+      "grad_norm": 684.0,
+      "step": 28,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.0661097424370902,
+      "dpo_margin": -0.4962435151849474,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.016027191653847694,
+      "rejected_logp_diff": -0.014042217550533158,
+      "grad_norm": 38.25,
+      "step": 29,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.7933081643921989,
+      "dpo_margin": -1.4686883645398277,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.021167232788034847,
+      "rejected_logp_diff": -0.015292479257498468,
+      "grad_norm": 99.0,
+      "step": 30,
+      "mem_gb": 70.34732544
+    }
+  ],
+  "dpo_VQ": [
+    {
+      "dpo_loss": 0.6931471824645996,
+      "dpo_margin": 0.0,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0,
+      "rejected_logp_diff": 0.0,
+      "grad_norm": 98.5,
+      "step": 1,
+      "mem_gb": 64.720666624
+    },
+    {
+      "dpo_loss": 3.4335764816829135,
+      "dpo_margin": -3.018284950937544,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.008965656161308289,
+      "rejected_logp_diff": 0.0031074838978903635,
+      "grad_norm": 696.0,
+      "step": 2,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.07845690176639307,
+      "dpo_margin": 3.3593369211469377,
+      "dpo_accuracy": 1.0,
+      "chosen_logp_diff": 0.019654124975204468,
+      "rejected_logp_diff": 0.006216777222497123,
+      "grad_norm": 15.1875,
+      "step": 3,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 3.967663049697876,
+      "dpo_margin": -3.8595427019255504,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": 0.0017403752676078252,
+      "rejected_logp_diff": 0.01717854610511235,
+      "grad_norm": 125.5,
+      "step": 4,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.5461020949296653,
+      "dpo_margin": 0.13262856006622314,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": -0.023885959227170264,
+      "rejected_logp_diff": -0.024416473295007433,
+      "grad_norm": 138.0,
+      "step": 5,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.2177592388221197,
+      "dpo_margin": -0.5299340294940131,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.009789931188736643,
+      "rejected_logp_diff": -0.007670195108013493,
+      "grad_norm": 99.0,
+      "step": 6,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.353985761756381,
+      "dpo_margin": 0.14962419441768102,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.010336836533887046,
+      "rejected_logp_diff": -0.010935333158288683,
+      "grad_norm": 426.0,
+      "step": 7,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.181126879794257,
+      "dpo_margin": -1.3846452715141433,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.0026557759514876773,
+      "rejected_logp_diff": 0.002882804987686021,
+      "grad_norm": 1232.0,
+      "step": 8,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.1201481350830622,
+      "dpo_margin": -0.49942624994686674,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.014745599191103662,
+      "rejected_logp_diff": -0.012747894174286298,
+      "grad_norm": 668.0,
+      "step": 9,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.173074109213693,
+      "dpo_margin": -1.721703611846481,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.013542986075792993,
+      "rejected_logp_diff": -0.006656171754002571,
+      "grad_norm": 266.0,
+      "step": 10,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.36933143183605516,
+      "dpo_margin": 8.90536782996995,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.006837704884154456,
+      "rejected_logp_diff": -0.04245917552283832,
+      "grad_norm": 18.75,
+      "step": 11,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8521010535103934,
+      "dpo_margin": -0.29252828657627106,
+      "dpo_accuracy": 0.0,
+      "chosen_logp_diff": -0.0017234933163438524,
+      "rejected_logp_diff": -0.0005533801657812936,
+      "grad_norm": 19.375,
+      "step": 12,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.8272164506571633,
+      "dpo_margin": -0.10452108830213547,
+      "dpo_accuracy": 0.7142857142857143,
+      "chosen_logp_diff": -0.003213940454380853,
+      "rejected_logp_diff": -0.0027958560468895094,
+      "grad_norm": 105.0,
+      "step": 13,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7456731796264648,
+      "dpo_margin": -0.08242058221782957,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": 0.004641159304550716,
+      "rejected_logp_diff": 0.004970841641936984,
+      "grad_norm": 23.25,
+      "step": 14,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.0777267728533064,
+      "dpo_margin": -1.779198122876031,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": 0.008016241448266166,
+      "rejected_logp_diff": 0.015133033905710493,
+      "grad_norm": 45.25,
+      "step": 15,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.7802605132705399,
+      "dpo_margin": 0.3185734876564571,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": 0.012010099632399423,
+      "rejected_logp_diff": 0.010735805545534407,
+      "grad_norm": 37.5,
+      "step": 16,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.0790244868549053,
+      "dpo_margin": 1.306388984833445,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.0017271850790296281,
+      "rejected_logp_diff": -0.006952740784202304,
+      "grad_norm": 111.5,
+      "step": 17,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 12.198466262647084,
+      "dpo_margin": -11.337547068084989,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.05250968251909528,
+      "rejected_logp_diff": -0.007159494927951268,
+      "grad_norm": 852.0,
+      "step": 18,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 4.991355961188674,
+      "dpo_margin": -3.7074159724371776,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.050712858991963525,
+      "rejected_logp_diff": -0.03588319516607693,
+      "grad_norm": 370.0,
+      "step": 19,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.2336466227258955,
+      "dpo_margin": -0.7909855821302959,
+      "dpo_accuracy": 0.14285714285714285,
+      "chosen_logp_diff": 0.00287723754133497,
+      "rejected_logp_diff": 0.006041179810251508,
+      "grad_norm": 36.5,
+      "step": 20,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.9241953492164612,
+      "dpo_margin": -1.2977198474109173,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.012633109731333596,
+      "rejected_logp_diff": -0.007442230092627662,
+      "grad_norm": 220.0,
+      "step": 21,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 3.0260188459595736,
+      "dpo_margin": 0.8946993095534188,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": -0.054444822881902964,
+      "rejected_logp_diff": -0.058023620929036825,
+      "grad_norm": 208.0,
+      "step": 22,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.6371377174343382,
+      "dpo_margin": -0.3826193298612322,
+      "dpo_accuracy": 0.5714285714285714,
+      "chosen_logp_diff": -0.05451537562268121,
+      "rejected_logp_diff": -0.05298489837774208,
+      "grad_norm": 252.0,
+      "step": 23,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.36664338409900665,
+      "dpo_margin": 1.0512231758662633,
+      "dpo_accuracy": 0.8571428571428571,
+      "chosen_logp_diff": 0.014512210019997187,
+      "rejected_logp_diff": 0.010307317333562034,
+      "grad_norm": 21.875,
+      "step": 24,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.270946564418929,
+      "dpo_margin": -1.7477655581065588,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.03666909664337124,
+      "rejected_logp_diff": -0.029678034197006906,
+      "grad_norm": 136.0,
+      "step": 25,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 0.6217872713293348,
+      "dpo_margin": 8.122688055038452,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": 0.023315871400492533,
+      "rejected_logp_diff": -0.00917488123689379,
+      "grad_norm": 20.625,
+      "step": 26,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 1.084692507982254,
+      "dpo_margin": -0.4477344623633793,
+      "dpo_accuracy": 0.2857142857142857,
+      "chosen_logp_diff": -0.00045025721192359924,
+      "rejected_logp_diff": 0.0013406806226287568,
+      "grad_norm": 77.0,
+      "step": 27,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.9314839997927526,
+      "dpo_margin": -1.6148196373667036,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.045099848615271707,
+      "rejected_logp_diff": -0.03864057029464415,
+      "grad_norm": 127.0,
+      "step": 28,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 10.91693776845932,
+      "dpo_margin": -10.378384385790143,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.02381101729614394,
+      "rejected_logp_diff": 0.017702519361461912,
+      "grad_norm": 376.0,
+      "step": 29,
+      "mem_gb": 70.34732544
+    },
+    {
+      "dpo_loss": 2.4019701991762434,
+      "dpo_margin": -1.8819910500730788,
+      "dpo_accuracy": 0.42857142857142855,
+      "chosen_logp_diff": -0.01424970238336495,
+      "rejected_logp_diff": -0.006721737927624157,
+      "grad_norm": 99.0,
+      "step": 30,
+      "mem_gb": 70.34732544
+    }
+  ],
+  "redmd_MQ": [
+    {
+      "redmd_loss_pol": 0.07488145785672325,
+      "redmd_loss_ref": 0.07488145785672325,
+      "reward": 0.9669104337122583,
+      "exp_beta_reward": 6.915884501022058,
+      "denoising_gap": 0.0,
+      "grad_norm": 2.734375,
+      "step": 1,
+      "mem_gb": 38.508363776
+    },
+    {
+      "redmd_loss_pol": 0.11584008338728122,
+      "redmd_loss_ref": 0.12141408917627164,
+      "reward": -0.07392658026210996,
+      "exp_beta_reward": 0.8625577631731123,
+      "denoising_gap": -0.0055740057889904215,
+      "grad_norm": 0.93359375,
+      "step": 2,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.04904564337006637,
+      "redmd_loss_ref": 0.06410820808793817,
+      "reward": 0.79720874665122,
+      "exp_beta_reward": 4.925459123390165,
+      "denoising_gap": -0.015062564717871797,
+      "grad_norm": 0.984375,
+      "step": 3,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.0975094014512641,
+      "redmd_loss_ref": 0.10374211892485619,
+      "reward": -0.8372748200030773,
+      "exp_beta_reward": 0.18739255459067633,
+      "denoising_gap": -0.006232717473592081,
+      "grad_norm": 0.17578125,
+      "step": 4,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.16451016440987587,
+      "redmd_loss_ref": 0.1833834515086242,
+      "reward": -0.6551548584461662,
+      "exp_beta_reward": 0.26973650149518275,
+      "denoising_gap": -0.01887328709874833,
+      "grad_norm": 0.291015625,
+      "step": 5,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.0420535056452666,
+      "redmd_loss_ref": 0.05086339438068015,
+      "reward": 1.1139852291651582,
+      "exp_beta_reward": 9.28101075405927,
+      "denoising_gap": -0.008809888735413551,
+      "grad_norm": 2.953125,
+      "step": 6,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.04242506570049694,
+      "redmd_loss_ref": 0.06080915512783187,
+      "reward": 2.39240460502498,
+      "exp_beta_reward": 119.67852744525081,
+      "denoising_gap": -0.018384089427334924,
+      "grad_norm": 23.5,
+      "step": 7,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.20314692173685348,
+      "redmd_loss_ref": 0.23839833268097468,
+      "reward": -0.8163714611541526,
+      "exp_beta_reward": 0.1953928909038559,
+      "denoising_gap": -0.03525141094412121,
+      "grad_norm": 0.09521484375,
+      "step": 8,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.12661742631878173,
+      "redmd_loss_ref": 0.1594700621707099,
+      "reward": -0.533535316052422,
+      "exp_beta_reward": 0.3440147887072171,
+      "denoising_gap": -0.03285263585192816,
+      "grad_norm": 0.10205078125,
+      "step": 9,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.05540163123181888,
+      "redmd_loss_ref": 0.0800885728427342,
+      "reward": 1.0008507711244659,
+      "exp_beta_reward": 7.4016395926998255,
+      "denoising_gap": -0.024686941610915315,
+      "grad_norm": 1.7109375,
+      "step": 10,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.08744513562747411,
+      "redmd_loss_ref": 0.11063425987958908,
+      "reward": -0.9015758498660489,
+      "exp_beta_reward": 0.16477873587243744,
+      "denoising_gap": -0.023189124252114973,
+      "grad_norm": 0.052001953125,
+      "step": 11,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.10619187727570534,
+      "redmd_loss_ref": 0.14767231792211533,
+      "reward": 1.66834407356455,
+      "exp_beta_reward": 28.12582369781361,
+      "denoising_gap": -0.04148044064640999,
+      "grad_norm": 20.25,
+      "step": 12,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.11224581194775445,
+      "redmd_loss_ref": 0.14634238609245845,
+      "reward": -1.1600173774527551,
+      "exp_beta_reward": 0.09827017017453152,
+      "denoising_gap": -0.034096574144704,
+      "grad_norm": 0.030029296875,
+      "step": 13,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.18493607587047986,
+      "redmd_loss_ref": 0.25071643771869795,
+      "reward": -0.7442482441532112,
+      "exp_beta_reward": 0.22571176082295416,
+      "denoising_gap": -0.06578036184821809,
+      "grad_norm": 0.30078125,
+      "step": 14,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.14668154769710132,
+      "redmd_loss_ref": 0.19509396914924895,
+      "reward": -0.8688729205886613,
+      "exp_beta_reward": 0.17591649774180004,
+      "denoising_gap": -0.048412421452147636,
+      "grad_norm": 0.06005859375,
+      "step": 15,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07611677582774844,
+      "redmd_loss_ref": 0.0984519070812634,
+      "reward": 0.7067011802186662,
+      "exp_beta_reward": 4.109915055106795,
+      "denoising_gap": -0.022335131253514967,
+      "grad_norm": 0.5546875,
+      "step": 16,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07367796051715102,
+      "redmd_loss_ref": 0.08300919671143804,
+      "reward": -0.7293993465353704,
+      "exp_beta_reward": 0.2325154294174758,
+      "denoising_gap": -0.009331236194287024,
+      "grad_norm": 0.09716796875,
+      "step": 17,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07764325211090702,
+      "redmd_loss_ref": 0.10102225494171892,
+      "reward": 0.853775975671566,
+      "exp_beta_reward": 5.51544286476721,
+      "denoising_gap": -0.0233790028308119,
+      "grad_norm": 2.03125,
+      "step": 18,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07722536048718862,
+      "redmd_loss_ref": 0.09466206548469407,
+      "reward": -0.7400057019766854,
+      "exp_beta_reward": 0.2276350924290311,
+      "denoising_gap": -0.01743670499750545,
+      "grad_norm": 0.040771484375,
+      "step": 19,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.0812778789550066,
+      "redmd_loss_ref": 0.11097033055765289,
+      "reward": 0.06749149228875528,
+      "exp_beta_reward": 1.144517309740059,
+      "denoising_gap": -0.02969245160264629,
+      "grad_norm": 0.1865234375,
+      "step": 20,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.20012961966650827,
+      "redmd_loss_ref": 0.25156234204769135,
+      "reward": -1.2957787271015857,
+      "exp_beta_reward": 0.07490329074804657,
+      "denoising_gap": -0.05143272238118307,
+      "grad_norm": 0.0177001953125,
+      "step": 21,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.05496873852929899,
+      "redmd_loss_ref": 0.08615010544391614,
+      "reward": -0.07958330316414458,
+      "exp_beta_reward": 0.8528542562156574,
+      "denoising_gap": -0.031181366914617155,
+      "grad_norm": 0.42578125,
+      "step": 22,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.04756250432027238,
+      "redmd_loss_ref": 0.06872375854956252,
+      "reward": 0.6161936137861125,
+      "exp_beta_reward": 3.429406546077928,
+      "denoising_gap": -0.02116125422929014,
+      "grad_norm": 2.234375,
+      "step": 23,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.12097882692302976,
+      "redmd_loss_ref": 0.17136392848832266,
+      "reward": -0.35110600246180584,
+      "exp_beta_reward": 0.4954880686465955,
+      "denoising_gap": -0.0503851015652929,
+      "grad_norm": 0.1640625,
+      "step": 24,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.3163193496210234,
+      "redmd_loss_ref": 0.42411074680941446,
+      "reward": -0.8595923595775108,
+      "exp_beta_reward": 0.17921219663914492,
+      "denoising_gap": -0.10779139718839104,
+      "grad_norm": 0.859375,
+      "step": 25,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.043863970919379165,
+      "redmd_loss_ref": 0.052430747875145504,
+      "reward": -0.17574759249873295,
+      "exp_beta_reward": 0.7036352379592951,
+      "denoising_gap": -0.00856677695576634,
+      "grad_norm": 0.1728515625,
+      "step": 26,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.19918271899223328,
+      "redmd_loss_ref": 0.25657851142542704,
+      "reward": -0.15594906234161182,
+      "exp_beta_reward": 0.7320561028769688,
+      "denoising_gap": -0.05739579243319376,
+      "grad_norm": 0.384765625,
+      "step": 27,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.23873706374849593,
+      "redmd_loss_ref": 0.29533615495477405,
+      "reward": -0.43595684599232504,
+      "exp_beta_reward": 0.4181505716825063,
+      "denoising_gap": -0.056599091206278124,
+      "grad_norm": 0.130859375,
+      "step": 28,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.10798207297921181,
+      "redmd_loss_ref": 0.13239909282752446,
+      "reward": -0.7905626629136197,
+      "exp_beta_reward": 0.20574343947732687,
+      "denoising_gap": -0.024417019848312654,
+      "grad_norm": 0.1005859375,
+      "step": 29,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.2071076982787677,
+      "redmd_loss_ref": 0.2548493359770094,
+      "reward": -1.1897151726884367,
+      "exp_beta_reward": 0.0926033143941738,
+      "denoising_gap": -0.04774163769824166,
+      "grad_norm": 0.038818359375,
+      "step": 30,
+      "mem_gb": 43.96515328
+    }
+  ],
+  "redmd_TA": [
+    {
+      "redmd_loss_pol": 0.08265394850500993,
+      "redmd_loss_ref": 0.08265394850500993,
+      "reward": 0.39264957605190864,
+      "exp_beta_reward": 2.193062901993163,
+      "denoising_gap": 0.0,
+      "grad_norm": 1.9375,
+      "step": 1,
+      "mem_gb": 38.508363776
+    },
+    {
+      "redmd_loss_pol": 0.10225846192666463,
+      "redmd_loss_ref": 0.11467381513544492,
+      "reward": 1.045738625054735,
+      "exp_beta_reward": 8.096867432187516,
+      "denoising_gap": -0.012415353208780289,
+      "grad_norm": 18.375,
+      "step": 2,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.05722279633794512,
+      "redmd_loss_ref": 0.06406491702156407,
+      "reward": -0.85443951275825,
+      "exp_beta_reward": 0.1810686522345688,
+      "denoising_gap": -0.006842120683618946,
+      "grad_norm": 0.0576171875,
+      "step": 3,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.08224077482840844,
+      "redmd_loss_ref": 0.09006173828882831,
+      "reward": -0.823340034234306,
+      "exp_beta_reward": 0.19268856072200966,
+      "denoising_gap": -0.007820963460419869,
+      "grad_norm": 0.1884765625,
+      "step": 4,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.14211755857935973,
+      "redmd_loss_ref": 0.15098101645708084,
+      "reward": 1.5806496556665734,
+      "exp_beta_reward": 23.601241376164822,
+      "denoising_gap": -0.00886345787772111,
+      "grad_norm": 18.0,
+      "step": 5,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.056328263732471635,
+      "redmd_loss_ref": 0.07844757035906826,
+      "reward": -0.3101986385892282,
+      "exp_beta_reward": 0.5377307669923779,
+      "denoising_gap": -0.02211930662659662,
+      "grad_norm": 0.203125,
+      "step": 6,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.053585500323346684,
+      "redmd_loss_ref": 0.06924711194421564,
+      "reward": 0.23093228772739927,
+      "exp_beta_reward": 1.587030365806513,
+      "denoising_gap": -0.015661611620868952,
+      "grad_norm": 0.8359375,
+      "step": 7,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.20946555052484786,
+      "redmd_loss_ref": 0.24824295725141252,
+      "reward": 2.0036025635922132,
+      "exp_beta_reward": 54.99295725830706,
+      "denoising_gap": -0.038777406726564656,
+      "grad_norm": 37.75,
+      "step": 8,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.15117731477533067,
+      "redmd_loss_ref": 0.19498078099318913,
+      "reward": 1.2323354961983994,
+      "exp_beta_reward": 11.75961251351739,
+      "denoising_gap": -0.04380346621785847,
+      "grad_norm": 8.75,
+      "step": 9,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07547736460609096,
+      "redmd_loss_ref": 0.10766199656895228,
+      "reward": 1.4686915329803747,
+      "exp_beta_reward": 18.86640950480472,
+      "denoising_gap": -0.032184631962861324,
+      "grad_norm": 6.90625,
+      "step": 10,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.11759963684848376,
+      "redmd_loss_ref": 0.15366653299757413,
+      "reward": 0.9586600851876914,
+      "exp_beta_reward": 6.802703933164366,
+      "denoising_gap": -0.036066896149090366,
+      "grad_norm": 3.40625,
+      "step": 11,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.12411560703601156,
+      "redmd_loss_ref": 0.1564322720680918,
+      "reward": 2.3892360972891202,
+      "exp_beta_reward": 118.92252070835195,
+      "denoising_gap": -0.032316665032080236,
+      "grad_norm": 79.5,
+      "step": 12,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.09728163959724563,
+      "redmd_loss_ref": 0.13029299995728902,
+      "reward": 1.9787229807730582,
+      "exp_beta_reward": 52.323518868388454,
+      "denoising_gap": -0.03301136036004339,
+      "grad_norm": 25.375,
+      "step": 13,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.16635550877877645,
+      "redmd_loss_ref": 0.24800121411681175,
+      "reward": 1.605529238485729,
+      "exp_beta_reward": 24.8053282025448,
+      "denoising_gap": -0.08164570533803531,
+      "grad_norm": 30.0,
+      "step": 14,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.1974135200892176,
+      "redmd_loss_ref": 0.25495185596602304,
+      "reward": 1.5433302814378407,
+      "exp_beta_reward": 21.903809311825338,
+      "denoising_gap": -0.05753833587680546,
+      "grad_norm": 18.625,
+      "step": 15,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.12374289493475642,
+      "redmd_loss_ref": 0.1995694259447711,
+      "reward": 0.7596234226344492,
+      "exp_beta_reward": 4.568782898558473,
+      "denoising_gap": -0.07582653101001467,
+      "grad_norm": 3.09375,
+      "step": 16,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.08828278524535042,
+      "redmd_loss_ref": 0.12248447856732778,
+      "reward": 1.8667648580868594,
+      "exp_beta_reward": 41.82648352981699,
+      "denoising_gap": -0.03420169332197735,
+      "grad_norm": 12.9375,
+      "step": 17,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.061347413808107376,
+      "redmd_loss_ref": 0.09051711245306901,
+      "reward": -0.6833923808765575,
+      "exp_beta_reward": 0.254925288824767,
+      "denoising_gap": -0.029169698644961634,
+      "grad_norm": 0.0966796875,
+      "step": 18,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07091798526900155,
+      "redmd_loss_ref": 0.09229907233800207,
+      "reward": 2.3892360972891202,
+      "exp_beta_reward": 118.92252070835195,
+      "denoising_gap": -0.02138108706900052,
+      "grad_norm": 24.125,
+      "step": 19,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07138500096542495,
+      "redmd_loss_ref": 0.09776926626052175,
+      "reward": 1.6801679869431947,
+      "exp_beta_reward": 28.798864920610022,
+      "denoising_gap": -0.026384265295096798,
+      "grad_norm": 5.0625,
+      "step": 20,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.22147299029997417,
+      "redmd_loss_ref": 0.27476623547928675,
+      "reward": -0.12360176744556355,
+      "exp_beta_reward": 0.7809817203242096,
+      "denoising_gap": -0.05329324517931258,
+      "grad_norm": 0.32421875,
+      "step": 21,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.05068742563681943,
+      "redmd_loss_ref": 0.06770148557344717,
+      "reward": 2.0036025635922132,
+      "exp_beta_reward": 54.99295725830706,
+      "denoising_gap": -0.01701405993662774,
+      "grad_norm": 17.25,
+      "step": 22,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.02087727707943746,
+      "redmd_loss_ref": 0.022539448126086166,
+      "reward": 1.6428486127144617,
+      "exp_beta_reward": 26.727612991370655,
+      "denoising_gap": -0.0016621710466487062,
+      "grad_norm": 3.46875,
+      "step": 23,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.09380124935082026,
+      "redmd_loss_ref": 0.1254339457622596,
+      "reward": 1.2945344532462877,
+      "exp_beta_reward": 13.317366115631279,
+      "denoising_gap": -0.03163269641143934,
+      "grad_norm": 11.125,
+      "step": 24,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.17242488903658731,
+      "redmd_loss_ref": 0.22638922716890061,
+      "reward": -0.06140281039767533,
+      "exp_beta_reward": 0.8844355617345209,
+      "denoising_gap": -0.0539643381323133,
+      "grad_norm": 0.70703125,
+      "step": 25,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.050815769870366366,
+      "redmd_loss_ref": 0.08178103382566146,
+      "reward": -0.527894988256837,
+      "exp_beta_reward": 0.34791747208476925,
+      "denoising_gap": -0.030965263955295093,
+      "grad_norm": 0.08544921875,
+      "step": 26,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.2496376293046134,
+      "redmd_loss_ref": 0.3273057235138757,
+      "reward": 1.3816129931133312,
+      "exp_beta_reward": 15.850895326854893,
+      "denoising_gap": -0.07766809420926232,
+      "grad_norm": 12.3125,
+      "step": 27,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.20818762481212616,
+      "redmd_loss_ref": 0.2710783119712557,
+      "reward": 2.0658015206401017,
+      "exp_beta_reward": 62.277676645238635,
+      "denoising_gap": -0.06289068715912954,
+      "grad_norm": 14.3125,
+      "step": 28,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.14817537580217635,
+      "redmd_loss_ref": 0.18523996749094554,
+      "reward": 0.1438537478603558,
+      "exp_beta_reward": 1.3333672314561396,
+      "denoising_gap": -0.03706459168876919,
+      "grad_norm": 3.28125,
+      "step": 29,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.15195685092891967,
+      "redmd_loss_ref": 0.1949767427785056,
+      "reward": -1.150467673958043,
+      "exp_beta_reward": 0.10016511066560199,
+      "denoising_gap": -0.043019891849585934,
+      "grad_norm": 0.0162353515625,
+      "step": 30,
+      "mem_gb": 43.96515328
+    }
+  ],
+  "redmd_VQ": [
+    {
+      "redmd_loss_pol": 0.043421024456620216,
+      "redmd_loss_ref": 0.043421024456620216,
+      "reward": -0.008653675031144318,
+      "exp_beta_reward": 0.9828415617933138,
+      "denoising_gap": 0.0,
+      "grad_norm": 0.310546875,
+      "step": 1,
+      "mem_gb": 38.508363776
+    },
+    {
+      "redmd_loss_pol": 0.08596888969519309,
+      "redmd_loss_ref": 0.06902768303241048,
+      "reward": -0.3979578216764549,
+      "exp_beta_reward": 0.4511679368122462,
+      "denoising_gap": 0.016941206662782607,
+      "grad_norm": 0.34375,
+      "step": 2,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.0861149834735053,
+      "redmd_loss_ref": 0.10249402879604272,
+      "reward": -0.7664063890371953,
+      "exp_beta_reward": 0.2159274563209324,
+      "denoising_gap": -0.016379045322537422,
+      "grad_norm": 0.1435546875,
+      "step": 3,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.18224897874253138,
+      "redmd_loss_ref": 0.18179579158978804,
+      "reward": -0.09902785193094855,
+      "exp_beta_reward": 0.8203241566415748,
+      "denoising_gap": 0.00045318715274333954,
+      "grad_norm": 1.8515625,
+      "step": 4,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.14325871531452453,
+      "redmd_loss_ref": 0.1626938097178936,
+      "reward": -0.6551766328528208,
+      "exp_beta_reward": 0.26972475504641025,
+      "denoising_gap": -0.019435094403369074,
+      "grad_norm": 0.1748046875,
+      "step": 5,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.05354333030326026,
+      "redmd_loss_ref": 0.07874036886330162,
+      "reward": 0.4223616301833067,
+      "exp_beta_reward": 2.327333659978962,
+      "denoising_gap": -0.02519703856004136,
+      "grad_norm": 0.78125,
+      "step": 6,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.0787645908338683,
+      "redmd_loss_ref": 0.11587652883359364,
+      "reward": 1.479044313934864,
+      "exp_beta_reward": 19.261121378729012,
+      "denoising_gap": -0.03711193799972534,
+      "grad_norm": 7.34375,
+      "step": 7,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.21378301084041595,
+      "redmd_loss_ref": 0.251632530774389,
+      "reward": -1.1139993771133654,
+      "exp_beta_reward": 0.1077438364206775,
+      "denoising_gap": -0.037849519933973064,
+      "grad_norm": 0.02978515625,
+      "step": 8,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.1206967926451138,
+      "redmd_loss_ref": 0.1519458762237004,
+      "reward": -0.4257652607225485,
+      "exp_beta_reward": 0.4267612645829862,
+      "denoising_gap": -0.031249083578586592,
+      "grad_norm": 0.43359375,
+      "step": 9,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.04402201250195503,
+      "redmd_loss_ref": 0.0560416935810021,
+      "reward": -0.25892062644598685,
+      "exp_beta_reward": 0.5958053537702367,
+      "denoising_gap": -0.012019681079047065,
+      "grad_norm": 0.32421875,
+      "step": 10,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.09866468448724065,
+      "redmd_loss_ref": 0.13057610552225793,
+      "reward": -0.6134654742836804,
+      "exp_beta_reward": 0.2931910166075729,
+      "denoising_gap": -0.031911421035017276,
+      "grad_norm": 0.06689453125,
+      "step": 11,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.08688040503433772,
+      "redmd_loss_ref": 0.12127478952918734,
+      "reward": 0.9507029720590854,
+      "exp_beta_reward": 6.6953010472761,
+      "denoising_gap": -0.03439438449484962,
+      "grad_norm": 1.2734375,
+      "step": 12,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.1241121127137116,
+      "redmd_loss_ref": 0.16250417328306607,
+      "reward": -1.0236252002135613,
+      "exp_beta_reward": 0.12908936010715438,
+      "denoising_gap": -0.03839206056935447,
+      "grad_norm": 0.0181884765625,
+      "step": 13,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.10255247833473342,
+      "redmd_loss_ref": 0.15200891345739365,
+      "reward": -0.6134654742836804,
+      "exp_beta_reward": 0.2931910166075729,
+      "denoising_gap": -0.04945643512266022,
+      "grad_norm": 0.1513671875,
+      "step": 14,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.19360140072447912,
+      "redmd_loss_ref": 0.26478878621544155,
+      "reward": -0.7246952304680548,
+      "exp_beta_reward": 0.23471331143234656,
+      "denoising_gap": -0.07118738549096243,
+      "grad_norm": 0.17578125,
+      "step": 15,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.057884867170027325,
+      "redmd_loss_ref": 0.07162219073091235,
+      "reward": -0.4535726997686421,
+      "exp_beta_reward": 0.4036749114648655,
+      "denoising_gap": -0.013737323560885022,
+      "grad_norm": 0.061279296875,
+      "step": 16,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.11860909472618784,
+      "redmd_loss_ref": 0.16929532693965094,
+      "reward": -1.0688122886634632,
+      "exp_beta_reward": 0.11793465520802264,
+      "denoising_gap": -0.05068623221346309,
+      "grad_norm": 0.057373046875,
+      "step": 17,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.08416658293988023,
+      "redmd_loss_ref": 0.10386350405003343,
+      "reward": -0.04341297383876133,
+      "exp_beta_reward": 0.9168366592964193,
+      "denoising_gap": -0.019696921110153198,
+      "grad_norm": 0.478515625,
+      "step": 18,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.12340760922857694,
+      "redmd_loss_ref": 0.16546859272888728,
+      "reward": -0.7976897579640506,
+      "exp_beta_reward": 0.20283153609487642,
+      "denoising_gap": -0.042060983500310345,
+      "grad_norm": 0.056640625,
+      "step": 19,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.10030079340296132,
+      "redmd_loss_ref": 0.13508393881576403,
+      "reward": -0.07122041288485495,
+      "exp_beta_reward": 0.8672388709665947,
+      "denoising_gap": -0.03478314541280271,
+      "grad_norm": 0.75390625,
+      "step": 20,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.22823666355439595,
+      "redmd_loss_ref": 0.2825168030602591,
+      "reward": -1.0757641484249867,
+      "exp_beta_reward": 0.11630627136834022,
+      "denoising_gap": -0.05428013950586316,
+      "grad_norm": 0.07080078125,
+      "step": 21,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.033960498470280855,
+      "redmd_loss_ref": 0.05383894080296159,
+      "reward": 0.060864922584089716,
+      "exp_beta_reward": 1.1294489344740208,
+      "denoising_gap": -0.019878442332680733,
+      "grad_norm": 0.2021484375,
+      "step": 22,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.026296869718602726,
+      "redmd_loss_ref": 0.03569215389766863,
+      "reward": 1.7432149848727534,
+      "exp_beta_reward": 32.66910956294456,
+      "denoising_gap": -0.009395284179065905,
+      "grad_norm": 3.78125,
+      "step": 23,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.07223779069525856,
+      "redmd_loss_ref": 0.09569434555513519,
+      "reward": -0.7559785993949102,
+      "exp_beta_reward": 0.2204780360538283,
+      "denoising_gap": -0.023456554859876633,
+      "grad_norm": 0.0751953125,
+      "step": 24,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.122178743992533,
+      "redmd_loss_ref": 0.15750817209482193,
+      "reward": -0.502235718099306,
+      "exp_beta_reward": 0.3662381638893939,
+      "denoising_gap": -0.03532942810228892,
+      "grad_norm": 0.072265625,
+      "step": 25,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.03172369381146772,
+      "redmd_loss_ref": 0.04898788779973984,
+      "reward": -0.15464273002313578,
+      "exp_beta_reward": 0.7339712206600889,
+      "denoising_gap": -0.01726419398827212,
+      "grad_norm": 0.0703125,
+      "step": 26,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.24703755123274668,
+      "redmd_loss_ref": 0.29476473586899893,
+      "reward": -0.6829840718989144,
+      "exp_beta_reward": 0.25513355041638186,
+      "denoising_gap": -0.04772718463625225,
+      "grad_norm": 0.1279296875,
+      "step": 27,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.22713773378304072,
+      "redmd_loss_ref": 0.2743813991546631,
+      "reward": -0.8081175476063357,
+      "exp_beta_reward": 0.19864517316337724,
+      "denoising_gap": -0.04724366537162236,
+      "grad_norm": 0.044189453125,
+      "step": 28,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.11754708204950605,
+      "redmd_loss_ref": 0.14400312836681092,
+      "reward": -0.7385989499911016,
+      "exp_beta_reward": 0.2282764464685564,
+      "denoising_gap": -0.026456046317304874,
+      "grad_norm": 0.11474609375,
+      "step": 29,
+      "mem_gb": 43.96515328
+    },
+    {
+      "redmd_loss_pol": 0.22831252217292786,
+      "redmd_loss_ref": 0.2833542845078877,
+      "reward": -1.2912718010322122,
+      "exp_beta_reward": 0.07558151002763,
+      "denoising_gap": -0.05504176233495983,
+      "grad_norm": 0.140625,
+      "step": 30,
+      "mem_gb": 43.96515328
+    }
+  ]
+}
