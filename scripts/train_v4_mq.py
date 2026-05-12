@@ -85,6 +85,8 @@ def main():
     ap.add_argument("--max_steps", type=int, default=1000)
     ap.add_argument("--eval_every", type=int, default=100)
     ap.add_argument("--n_eval_prompts", type=int, default=50)
+    ap.add_argument("--aggregate_chunks", action="store_true",
+                    help="Aggregate per-block margins before sigmoid (single rollout-level DPO loss)")
     ap.add_argument("--train_seed", type=int, default=0)
     ap.add_argument("--vidprom_seed", type=int, default=7)
     # Per-prompt seed = 1000 + 31*pid (matches data/pairs/ convention from gen_pairs.py).
@@ -101,9 +103,12 @@ def main():
     from dpo_longlive.path_setup import add_longlive_to_path, ensure_wan_models_symlink
     add_longlive_to_path(); ensure_wan_models_symlink()
 
-    from dpo_longlive.dpo_trainer import chunkwise_dpo_step
+    from dpo_longlive.dpo_trainer import chunkwise_dpo_step, chunkwise_dpo_step_aggregated
     from dpo_longlive.longlive_pipeline import load_pipeline, generate_one
     from dpo_longlive.reward_lib import load_reward, score_one
+
+    train_step_fn = chunkwise_dpo_step_aggregated if args.aggregate_chunks else chunkwise_dpo_step
+    print(f"[init] DPO loss mode: {'aggregated (single rollout-level sigmoid)' if args.aggregate_chunks else 'per-chunk (one sigmoid per block)'}")
 
     # ----- Phase 0: load prompts -----
     train_prompts = [json.loads(l) for l in open(args.train_prompts)]
@@ -239,7 +244,8 @@ def main():
                    "max_steps": args.max_steps, "reward_dim": args.reward_dim,
                    "n_eval_prompts": args.n_eval_prompts,
                    "rollout_seed_formula": "1000 + 31 * prompt_id",
-                   "train_pool": len(mq_pairs)},
+                   "train_pool": len(mq_pairs),
+                   "aggregate_chunks": args.aggregate_chunks},
         "baseline_eval_mean_MQ": base_eval_mean_MQ,
         "train_steps": [],
         "checkpoints": [],
@@ -313,7 +319,7 @@ def main():
         if cw.dim() == 4: cw = cw.unsqueeze(0)
         if rj.dim() == 4: rj = rj.unsqueeze(0)
 
-        loss, m = chunkwise_dpo_step(
+        loss, m = train_step_fn(
             policy, ref, scheduler_train,
             chosen_lat=cw, rejected_lat=rj, cond=cond,
             num_frame_per_block=3, beta=args.beta,

@@ -370,6 +370,229 @@ def chunkwise_dpo_step(
     return metrics["dpo_loss"], metrics
 
 
+def _setup_kv_caches(num_frame_per_block, kv_size, dtype, device, chosen_lat, ref, cond):
+    """Shared KV cache setup: 4 model-video caches + 1 shared cross-attn cache (warmed)."""
+    kv = {
+        ("pol", "w"): init_kv_cache(1, kv_size, dtype, device),
+        ("pol", "l"): init_kv_cache(1, kv_size, dtype, device),
+        ("ref", "w"): init_kv_cache(1, kv_size, dtype, device),
+        ("ref", "l"): init_kv_cache(1, kv_size, dtype, device),
+    }
+    shared_cax = init_crossattn_cache(1, dtype, device)
+    with torch.no_grad():
+        warm_x = torch.zeros((1, num_frame_per_block, 16, chosen_lat.shape[-2], chosen_lat.shape[-1]),
+                             dtype=dtype, device=device)
+        warm_t = torch.zeros((1, num_frame_per_block), dtype=torch.long, device=device)
+        ref(noisy_image_or_video=warm_x, conditional_dict=cond, timestep=warm_t,
+            kv_cache=kv[("ref", "w")], crossattn_cache=shared_cax, current_start=0)
+        for layer in shared_cax:
+            layer["k"] = layer["k"].detach(); layer["v"] = layer["v"].detach(); layer["is_init"] = True
+        for layer in kv[("ref", "w")]:
+            layer["k"].zero_(); layer["v"].zero_()
+            layer["global_end_index"].zero_(); layer["local_end_index"].zero_()
+    cax = {"pol": shared_cax, "ref": shared_cax}
+    return kv, cax, shared_cax
+
+
+def chunkwise_dpo_step_aggregated(
+    policy, ref, scheduler, *,
+    chosen_lat: torch.Tensor, rejected_lat: torch.Tensor,
+    cond: dict, num_frame_per_block: int, beta: float,
+    timesteps_grid: tuple, dtype, local_attn_size: int = 12,
+    context_noise: int = 0, loss_scale: float = 1.0,
+    anchor_alpha: float = 0.0,
+):
+    """Aggregated chunk-wise DPO: ONE sigmoid on the rollout-mean of per-block inside terms.
+
+    Mathematically:
+      L = -log σ(mean_b(inside_b)) + α * mean_b(e_pol_w_b)
+    where inside_b = -β/2 ((e_pol_w_b - e_ref_w_b) - (e_pol_l_b - e_ref_l_b)) per block.
+
+    The gradient w.r.t. θ is
+      ∂L/∂θ = -(1 - σ(mean_inside)) / N * Σ_b ∂inside_b/∂θ
+              + α/N * Σ_b ∂e_pol_w_b/∂θ
+
+    We get this with a two-pass scheme:
+      Pass 1 (no_grad): forward all N blocks, accumulate inside_b and e_pol_w_b values.
+                        Compute mean_inside, then scale = -(1 - σ(mean_inside)) / N.
+      Pass 2 (with grad): re-do per-block forward, build surrogate
+                        S_b = scale * inside_b + (α/N) * e_pol_w_b
+                        backward S_b — gradient w.r.t. policy params is exactly the
+                        block-b contribution to ∂L/∂θ above.
+                        Per-block backward to avoid 7-block memory blow-up; same noise/t
+                        as Pass 1 (pre-sampled & cached).
+
+    Compared to chunkwise_dpo_step (per-chunk loss):
+      - log-σ saturation at rollout level, not per block — confident-early-block blocks
+        still receive gradient if later blocks haven't aligned.
+      - One sigmoid outlier-dampens: a single bad block can no longer cause a 5.0
+        per-step loss spike via its own sigmoid; it averages first.
+      - 2x compute (pass 1 no_grad + pass 2 with grad).
+    """
+    import statistics
+    device = chosen_lat.device
+    T_total = chosen_lat.shape[1]
+    assert T_total % num_frame_per_block == 0
+    num_blocks = T_total // num_frame_per_block
+
+    kv_size = local_attn_size * _FRAME_SEQ_LEN
+
+    # ---- Pre-sample ONE noise tensor and ONE timestep per rollout, then slice per block.
+    #      All 7 blocks share the same t and the same source noise tensor, so the per-block
+    #      MC estimators differ only in which slice of the rollout they evaluate. Variance
+    #      from independent t/noise draws across blocks is removed; only the model's per-block
+    #      predictions contribute to between-block differences in inside_b. ----
+    t_idx = torch.randint(0, len(timesteps_grid), (1,)).item()
+    t_val = int(timesteps_grid[t_idx])
+    noise_w_full = torch.randn_like(chosen_lat)
+    noise_l_full = torch.randn_like(rejected_lat)
+
+    per_block = []
+    for bi in range(num_blocks):
+        s, e = bi * num_frame_per_block, (bi + 1) * num_frame_per_block
+        per_block.append({"s": s, "e": e, "t_val": t_val,
+                          "noise_w": noise_w_full[:, s:e].contiguous(),
+                          "noise_l": noise_l_full[:, s:e].contiguous(),
+                          "x0_w": chosen_lat[:, s:e].contiguous(),
+                          "x0_l": rejected_lat[:, s:e].contiguous()})
+
+    # ---- Pass 1: no_grad forward through all blocks ----
+    inside_vals = []
+    epw_vals = []
+    epw_minus_erw_vals = []  # for chosen_logp_diff metric
+    epl_minus_erl_vals = []  # for rejected_logp_diff metric
+    kv, cax, shared_cax = _setup_kv_caches(num_frame_per_block, kv_size, dtype, device, chosen_lat, ref, cond)
+    with torch.no_grad():
+        for bi, blk in enumerate(per_block):
+            s, e = blk["s"], blk["e"]
+            t_val = blk["t_val"]
+            xt_w = add_noise_to_block(scheduler, blk["x0_w"], blk["noise_w"],
+                                      torch.tensor([t_val], device=device, dtype=torch.long))
+            xt_l = add_noise_to_block(scheduler, blk["x0_l"], blk["noise_l"],
+                                      torch.tensor([t_val], device=device, dtype=torch.long))
+            timestep_BT = torch.full((1, num_frame_per_block), t_val, device=device, dtype=torch.long)
+            current_start = s * _FRAME_SEQ_LEN
+
+            def kvfwd(model, xt_block, model_key, video_key):
+                return model(noisy_image_or_video=xt_block, conditional_dict=cond,
+                             timestep=timestep_BT, kv_cache=kv[(model_key, video_key)],
+                             crossattn_cache=cax[model_key], current_start=current_start)
+
+            flow_pred_w_ref, _ = kvfwd(ref,    xt_w, "ref", "w")
+            flow_pred_l_ref, _ = kvfwd(ref,    xt_l, "ref", "l")
+            flow_pred_w_pol, _ = kvfwd(policy, xt_w, "pol", "w")
+            flow_pred_l_pol, _ = kvfwd(policy, xt_l, "pol", "l")
+
+            target_w = (blk["noise_w"] - blk["x0_w"]).float()
+            target_l = (blk["noise_l"] - blk["x0_l"]).float()
+            e_pol_w = (flow_pred_w_pol.float() - target_w).pow(2).mean()
+            e_ref_w = (flow_pred_w_ref.float() - target_w).pow(2).mean()
+            e_pol_l = (flow_pred_l_pol.float() - target_l).pow(2).mean()
+            e_ref_l = (flow_pred_l_ref.float() - target_l).pow(2).mean()
+            inside_b = -0.5 * beta * ((e_pol_w - e_ref_w) - (e_pol_l - e_ref_l))
+
+            inside_vals.append(float(inside_b.item()))
+            epw_vals.append(float(e_pol_w.item()))
+            epw_minus_erw_vals.append(float((e_pol_w - e_ref_w).item()))
+            epl_minus_erl_vals.append(float((e_pol_l - e_ref_l).item()))
+
+            # Update KV caches with clean K/V for next block (still no_grad).
+            for c_list in kv.values():
+                for layer_cache in c_list:
+                    layer_cache["global_end_index"] -= num_frame_per_block * _FRAME_SEQ_LEN
+                    layer_cache["local_end_index"] -= num_frame_per_block * _FRAME_SEQ_LEN
+            ctx_t = torch.full((1, num_frame_per_block), context_noise, device=device, dtype=torch.long)
+            for (m_key, v_key) in kv.keys():
+                model = policy if m_key == "pol" else ref
+                x0c = blk["x0_w"] if v_key == "w" else blk["x0_l"]
+                model(noisy_image_or_video=x0c, conditional_dict=cond, timestep=ctx_t,
+                      kv_cache=kv[(m_key, v_key)], crossattn_cache=cax[m_key], current_start=current_start)
+
+    mean_inside = statistics.mean(inside_vals)
+    mean_anchor = statistics.mean(epw_vals)
+    sigma_val   = torch.sigmoid(torch.tensor(mean_inside)).item()
+    dpo_grad_scale = -(1.0 - sigma_val) / num_blocks
+    # Aggregated DPO loss (for logging only; gradient comes from the surrogate below).
+    dpo_loss_val = -torch.nn.functional.logsigmoid(torch.tensor(mean_inside)).item()
+    anchor_loss_val = anchor_alpha * mean_anchor if anchor_alpha > 0 else 0.0
+    total_loss_val = dpo_loss_val + anchor_loss_val
+
+    # ---- Pass 2: with grad on policy, surrogate backward per block ----
+    # Reset KV caches; reuse same noise/t draws.
+    del kv, cax, shared_cax
+    kv, cax, shared_cax = _setup_kv_caches(num_frame_per_block, kv_size, dtype, device, chosen_lat, ref, cond)
+    for bi, blk in enumerate(per_block):
+        s, e = blk["s"], blk["e"]
+        t_val = blk["t_val"]
+        xt_w = add_noise_to_block(scheduler, blk["x0_w"], blk["noise_w"],
+                                  torch.tensor([t_val], device=device, dtype=torch.long))
+        xt_l = add_noise_to_block(scheduler, blk["x0_l"], blk["noise_l"],
+                                  torch.tensor([t_val], device=device, dtype=torch.long))
+        timestep_BT = torch.full((1, num_frame_per_block), t_val, device=device, dtype=torch.long)
+        current_start = s * _FRAME_SEQ_LEN
+
+        def kvfwd(model, xt_block, model_key, video_key):
+            return model(noisy_image_or_video=xt_block, conditional_dict=cond,
+                         timestep=timestep_BT, kv_cache=kv[(model_key, video_key)],
+                         crossattn_cache=cax[model_key], current_start=current_start)
+
+        with torch.no_grad():
+            flow_pred_w_ref, _ = kvfwd(ref, xt_w, "ref", "w")
+            flow_pred_l_ref, _ = kvfwd(ref, xt_l, "ref", "l")
+        flow_pred_w_pol, _ = kvfwd(policy, xt_w, "pol", "w")
+        flow_pred_l_pol, _ = kvfwd(policy, xt_l, "pol", "l")
+
+        target_w = (blk["noise_w"] - blk["x0_w"]).float()
+        target_l = (blk["noise_l"] - blk["x0_l"]).float()
+        e_pol_w = (flow_pred_w_pol.float() - target_w).pow(2).mean()
+        e_ref_w = (flow_pred_w_ref.float() - target_w).pow(2).mean()
+        e_pol_l = (flow_pred_l_pol.float() - target_l).pow(2).mean()
+        e_ref_l = (flow_pred_l_ref.float() - target_l).pow(2).mean()
+        inside_b = -0.5 * beta * ((e_pol_w - e_ref_w) - (e_pol_l - e_ref_l))
+
+        # Surrogate loss whose gradient w.r.t. θ matches block-b's contribution to ∂L/∂θ.
+        surrogate = dpo_grad_scale * inside_b
+        if anchor_alpha > 0:
+            surrogate = surrogate + (anchor_alpha / num_blocks) * e_pol_w
+        scaled = surrogate * loss_scale
+        scaled.backward(retain_graph=False)
+
+        # Drop graph for this block.
+        del flow_pred_w_pol, flow_pred_l_pol, flow_pred_w_ref, flow_pred_l_ref
+        del e_pol_w, e_pol_l, e_ref_w, e_ref_l, inside_b, surrogate, scaled
+        del xt_w, xt_l, target_w, target_l
+
+        for c_list in kv.values():
+            for layer in c_list:
+                layer["k"] = layer["k"].detach(); layer["v"] = layer["v"].detach()
+        for layer in shared_cax:
+            layer["k"] = layer["k"].detach(); layer["v"] = layer["v"].detach()
+
+        # Update KV with clean K/V for next block.
+        with torch.no_grad():
+            for c_list in kv.values():
+                for layer_cache in c_list:
+                    layer_cache["global_end_index"] -= num_frame_per_block * _FRAME_SEQ_LEN
+                    layer_cache["local_end_index"] -= num_frame_per_block * _FRAME_SEQ_LEN
+            ctx_t = torch.full((1, num_frame_per_block), context_noise, device=device, dtype=torch.long)
+            for (m_key, v_key) in kv.keys():
+                model = policy if m_key == "pol" else ref
+                x0c = blk["x0_w"] if v_key == "w" else blk["x0_l"]
+                model(noisy_image_or_video=x0c, conditional_dict=cond, timestep=ctx_t,
+                      kv_cache=kv[(m_key, v_key)], crossattn_cache=cax[m_key], current_start=current_start)
+
+    del kv, cax, shared_cax, per_block
+
+    metrics = {
+        "dpo_loss": total_loss_val,            # aggregated loss (one sigmoid)
+        "dpo_margin": mean_inside,             # mean inside across blocks
+        "dpo_accuracy": float(mean_inside > 0),  # rollout-level accuracy: 1 if mean inside > 0
+        "chosen_logp_diff": -statistics.mean(epw_minus_erw_vals),
+        "rejected_logp_diff": -statistics.mean(epl_minus_erl_vals),
+    }
+    return metrics["dpo_loss"], metrics
+
+
 def run(cfg: DPOConfig):
     Path(cfg.out_dir).mkdir(parents=True, exist_ok=True)
 
@@ -436,6 +659,7 @@ def run(cfg: DPOConfig):
     it = cycle(pairs)
     step = 0
     accum = 0
+    micro_metrics = []  # accumulates per-microbatch metrics; averaged at opt.step()
     opt.zero_grad(set_to_none=True)
     while step < cfg.max_steps:
         pair = next(it)
@@ -455,6 +679,7 @@ def run(cfg: DPOConfig):
             beta=cfg.beta, timesteps_grid=cfg.timesteps,
             dtype=dtype, loss_scale=1.0 / cfg.grad_accum,
         )
+        micro_metrics.append(metrics)
         accum += 1
 
         if accum >= cfg.grad_accum:
@@ -464,15 +689,23 @@ def run(cfg: DPOConfig):
             accum = 0
             step += 1
 
-            metrics["grad_norm"] = float(grad_norm.detach().item())
-            metrics["step"] = step
-            metrics["lr"] = opt.param_groups[0]["lr"]
+            # Average the per-microbatch metrics so the logged loss/margin/acc reflect
+            # the entire opt-step, not just its last microbatch. (Previously, only the
+            # last microbatch's metrics were reported because `metrics` was overwritten
+            # each microbatch — biased reporting under grad_accum > 1.)
+            keys = list(micro_metrics[0].keys())
+            agg_metrics = {k: sum(m[k] for m in micro_metrics) / len(micro_metrics) for k in keys}
+            micro_metrics.clear()
+
+            agg_metrics["grad_norm"] = float(grad_norm.detach().item())
+            agg_metrics["step"] = step
+            agg_metrics["lr"] = opt.param_groups[0]["lr"]
             free, total = torch.cuda.mem_get_info(0)
-            metrics["mem_gb"] = (total - free) / 1e9
+            agg_metrics["mem_gb"] = (total - free) / 1e9
             if step % cfg.log_every == 0:
-                print(f"[step {step:4d}/{cfg.max_steps}] {metrics}")
+                print(f"[step {step:4d}/{cfg.max_steps}] {agg_metrics}")
                 if not cfg.disable_wandb and cfg.wandb_mode != "disabled":
-                    wandb.log(metrics, step=step)
+                    wandb.log(agg_metrics, step=step)
 
             if step % cfg.save_every == 0 or step == cfg.max_steps:
                 ck = Path(cfg.out_dir) / f"policy_step{step:06d}.pt"
