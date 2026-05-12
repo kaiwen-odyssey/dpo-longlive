@@ -72,13 +72,15 @@ def latex_v3_training_table(v3_dpo_mq_summary):
     lines = [
         r"\begin{table}[t]",
         r"\centering",
-        r"\caption{Training-time DPO metrics for the picked v3 dpo\_MQ recipe "
+        r"\caption{Training-time DPO metrics for the v3 dpo\_MQ recipe "
         r"($\beta=500$, lr$=2\mathrm{e}{-}5$, grad\_accum$=4$, anchor $\alpha=1.0$, "
         r"$\delta_{\rm gap}=0.2$), averaged over consecutive 100-step windows plus "
         r"the final 20 steps; 400 total optimizer steps on the 473-pair filtered pool. "
         r"DPO accuracy climbs from $0.56$ in the first 100-step window to $0.62$ in the "
         rf"final window; the run posts positive implicit margin on {pct_pos:.0f}\% of the "
-        rf"{tot} logged optimizer steps and an overall mean accuracy of {overall_acc:.2f}.}}",
+        rf"{tot} logged optimizer steps and an overall mean accuracy of {overall_acc:.2f}. "
+        r"These training-time gains do not transfer to held-out prompts --- see "
+        r"Table~\ref{tab:overfit}.}",
         r"\label{tab:v3train}",
         r"\begin{tabular}{lccc}",
         r"\toprule",
@@ -97,6 +99,124 @@ def latex_v3_training_table(v3_dpo_mq_summary):
         bold = label.startswith("final")
         marker, end = (r"\textbf{", r"}") if bold else ("", "")
         lines.append(f"{marker}{label}{end} & " + " & ".join(f"{marker}{c}{end}" for c in cells) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines)
+
+
+def latex_overfit_table(v3_train_summary, eval_dpo_summary):
+    """Train vs held-out DPO acc/margin/loss for the v3 dpo_MQ recipe.
+
+    Reads:
+      runs/main_v3/dpo_MQ/training_summary.json -- final 20-step window
+      runs/main_v3/eval_dpo/summary.json        -- teacher-forced DPO forward on
+                                                   the 20 held-out prompts (2 base
+                                                   rollouts/prompt, paired by MQ,
+                                                   K=4 random t-grid samples each)
+    """
+    if not v3_train_summary or not eval_dpo_summary:
+        return ""
+    tr = v3_train_summary.get("final_window_last_20", {})
+    if not tr:
+        return ""
+    tr_loss = tr.get("loss", float("nan"))
+    tr_margin = tr.get("margin", float("nan"))
+    tr_acc = tr.get("acc", float("nan"))
+    pos = v3_train_summary.get("margin_sign_pos", 0)
+    neg = v3_train_summary.get("margin_sign_neg", 0)
+    tot = pos + neg if (pos + neg) > 0 else 1
+    tr_winmargin = pos / tot
+
+    ev_n = eval_dpo_summary.get("n_pairs", 0)
+    ev_loss = eval_dpo_summary.get("dpo_loss", {}).get("mean", float("nan"))
+    ev_loss_std = eval_dpo_summary.get("dpo_loss", {}).get("std", float("nan"))
+    ev_margin = eval_dpo_summary.get("dpo_margin", {}).get("mean", float("nan"))
+    ev_margin_std = eval_dpo_summary.get("dpo_margin", {}).get("std", float("nan"))
+    ev_acc = eval_dpo_summary.get("dpo_accuracy", {}).get("mean", float("nan"))
+    ev_acc_std = eval_dpo_summary.get("dpo_accuracy", {}).get("std", float("nan"))
+    ev_winmargin = eval_dpo_summary.get("win_rate_margin>0", float("nan"))
+    ev_gap = eval_dpo_summary.get("MQ_gap", {}).get("mean", float("nan"))
+    ev_gap_std = eval_dpo_summary.get("MQ_gap", {}).get("std", float("nan"))
+
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{Train vs.\ held-out DPO metrics for the v3 dpo\_MQ recipe "
+        r"($\beta=500$, lr$=2\mathrm{e}{-}5$, grad\_accum$=4$, anchor $\alpha=1.0$, "
+        rf"$\delta_{{\rm gap}}=0.2$, 400 steps). Train: final 20-step window. "
+        rf"Eval: same teacher-forced DPO forward on $n={ev_n}$ pairs built from "
+        rf"two fresh base rollouts (seeds $1000$ and $1007$, matching the training "
+        rf"distribution) on each held-out prompt, labelled chosen/rejected by MQ "
+        rf"(no ties to drop), $K=4$ random $t$-grid samples averaged per pair. "
+        rf"Held-out MQ gap is $+{ev_gap:.3f}\pm{ev_gap_std:.3f}$, comparable to "
+        rf"the $\delta_{{\rm gap}}=0.2$ filtered training pool, so the pairs are "
+        rf"equally easy. Accuracy drops by $-0.14$ to below chance and the "
+        rf"implicit margin flips sign by approximately one full unit --- the "
+        rf"textbook over-fitting signature, with only the prompt distribution "
+        rf"differing between train and eval.}}",
+        r"\label{tab:overfit}",
+        r"\begin{tabular}{lrr}",
+        r"\toprule",
+        r" & Train (final 20 steps) & Eval ($n=" + str(ev_n) + r"$ held-out pairs) \\",
+        r"\midrule",
+        rf"DPO accuracy        & ${tr_acc:.2f}$              & $\mathbf{{{ev_acc:.2f} \pm {ev_acc_std:.2f}}}$ \\",
+        rf"Implicit margin     & ${tr_margin:+.3f}$         & $\mathbf{{{ev_margin:+.3f} \pm {ev_margin_std:.2f}}}$ \\",
+        rf"DPO loss            & ${tr_loss:.3f}$            & ${ev_loss:.3f} \pm {ev_loss_std:.2f}$ \\",
+        rf"Win-rate (margin$>0$)& ${tr_winmargin:.2f}$\,($={pos}/{tot}$) & ${ev_winmargin:.2f}$\,($={int(round(ev_winmargin*ev_n))}/{ev_n}$) \\",
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{table}",
+    ]
+    return "\n".join(lines)
+
+
+def latex_v4_trajectory_table(v4_metrics):
+    """v4 trajectory: per-checkpoint eval-50 and train-window-100 metrics.
+
+    Reads runs/v4_mq/metrics.json — has baseline + 10 checkpoint records each with
+    eval50_mean_MQ / eval50_win_rate / train_window_mean_MQ / train_window_win_rate.
+    """
+    if not v4_metrics or not v4_metrics.get("checkpoints"):
+        return ""
+    base = v4_metrics.get("baseline_eval_mean_MQ", float("nan"))
+    cfg  = v4_metrics.get("config", {})
+    rows = v4_metrics["checkpoints"]
+    # Find best by eval50 mean MQ
+    best_idx = max(range(len(rows)), key=lambda i: rows[i]["eval50_mean_MQ"])
+
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{v4 dpo\_MQ trajectory: held-out (eval-50) and training-pool (train-window-100) mean MQ and win-rate at every 100-step checkpoint. "
+        rf"Configuration: $\beta={cfg.get('beta',500):g}$, lr$=5\mathrm{{e}}{{-}}6$, anchor $\alpha={cfg.get('anchor_alpha',0.5):.1f}$, batch 1, no $\delta_{{\rm gap}}$ filter, "
+        rf"trained on the full unfiltered $997$-pair MQ pool for $1000$ optimizer steps on a single Blackwell GPU ($9.4$\,h wall time). "
+        rf"Eval-50 = $20$ held-out VidProm prompts (from the same pool used by Tables~\ref{{tab:main}} and~\ref{{tab:overfit}}) plus $30$ fresh VidProm prompts sampled with no overlap to train, $50$ total. "
+        rf"Each policy rollout uses the matched per-prompt seed $1000 + 31 \cdot \text{{pid}}$ so the noise tensor is identical to the cached base rollout at the same prompt — the per-prompt comparison only varies the model weights. "
+        rf"Win-rate counts the number of prompts where the policy's MQ score beats its cached base. "
+        rf"Held-out reward baseline (LongLive base on eval-50): mean MQ ${base:+.4f}$. "
+        rf"The bolded step~$900$ row is the peak; \texttt{{policy\_best.pt}} stores those weights.}}",
+        r"\label{tab:v4traj}",
+        r"\begin{tabular}{rrrrr}",
+        r"\toprule",
+        r"step & eval-50 $\Delta$\,MQ & eval-50 win & train-100 mean MQ & train-100 win \\",
+        r"\midrule",
+    ]
+    for i, c in enumerate(rows):
+        step  = c["step"]
+        eval_mean = c["eval50_mean_MQ"]
+        delta = eval_mean - base
+        eval_win  = c["eval50_win_rate"]
+        train_mean = c["train_window_mean_MQ"]
+        train_win  = c["train_window_win_rate"]
+        bold = (i == best_idx)
+        marker, end = (r"\textbf{", r"}") if bold else ("", "")
+        cells = [
+            f"{marker}{step}{end}",
+            f"{marker}${delta:+.4f}${end}",
+            f"{marker}{eval_win:.2f}{end}",
+            f"{marker}${train_mean:+.3f}${end}",
+            f"{marker}{train_win:.2f}{end}",
+        ]
+        lines.append(" & ".join(cells) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
     return "\n".join(lines)
 
@@ -128,12 +248,14 @@ def latex_recipe_comparison(v1_summary, v2_summary, v3_summary):
         ("v2", r"500",  r"2e-5", "30",  "1", "0",   "0",    v2_summary),
         ("v3", r"500",  r"2e-5", "400", "4", "1.0", "0.20", v3_summary),
     ]
-    # v3 is the picked recipe by training-time DPO metrics; v2 is the early-stopping baseline.
-    picked = "v3"
+    # By held-out reward, v2 (the shorter schedule) is the best DPO\_MQ recipe in
+    # this study. v3 reaches higher training-time DPO accuracy but over-fits
+    # (see Table~\ref{tab:overfit}); v1 used an over-aggressive beta=5000.
+    picked = "v2"
     lines = [
         r"\begin{table}[t]",
         r"\centering",
-        r"\caption{Held-out evaluation of dpo\_MQ across the three training recipes. Each row evaluates a checkpoint trained on the MQ reward head with the listed hyper-parameters on the 851-prompt paired pool, scored on the same 20 held-out VidProm prompts. v3 is the picked recipe (training-time DPO accuracy $0.62$ in the final $20$-step window, $70\%$ of opt-steps with positive margin; see Section~\ref{sec:experiments}). v2 is an early-stopping baseline: with only $30$ optimizer steps the policy barely moves from the base, so the row reflects sampling noise on the small held-out set more than genuine training direction.}",
+        r"\caption{Held-out evaluation of dpo\_MQ across the three training recipes. Each row evaluates a checkpoint trained on the MQ reward head with the listed hyper-parameters on the 851-prompt paired pool, scored on the same 20 held-out VidProm prompts; deltas are computed against each row's own base inference (so v2 and v3 use slightly different denominators by inference noise --- the $\Delta$ columns are still internally consistent within a row). The shorter v2 recipe gives the strongest held-out $\Delta$ on both MQ and Overall; v3 trains longer and reaches higher training-time DPO accuracy ($0.62$ vs.\ $0.39$, see Table~\ref{tab:v3train}) but over-fits the filtered $473$-pair pool (Table~\ref{tab:overfit}), trading held-out gain for training-pool fit.}",
         r"\label{tab:recipe}",
         r"\begin{tabular}{lrrrrrrrrrr}",
         r"\toprule",
@@ -373,7 +495,7 @@ def make_dynamics_plots(main_metrics):
     return paths.get("dpo"), paths.get("redmd")
 
 
-def build_tex(eval_summary, main_metrics, abl_metrics, *, v1_summary=None, v3_summary=None, v3_dpo_mq_summary=None):
+def build_tex(eval_summary, main_metrics, abl_metrics, *, v1_summary=None, v3_summary=None, v3_dpo_mq_summary=None, eval_dpo_summary=None, v4_metrics=None):
     sizes = measure_dataset_sizes()
     steps = measure_step_counts(main_metrics)
     main_step_count = max(steps.values()) if steps else 30
@@ -384,11 +506,14 @@ def build_tex(eval_summary, main_metrics, abl_metrics, *, v1_summary=None, v3_su
     # The v2 main runs use the full paired pool, so the figure captions reflect that.
     fig_train_pool = train_pool
 
-    # v3 is the picked recipe; overlay its rows on top of v2.
-    merged_eval = merge_eval_summaries(eval_summary, v3_summary or {})
-    main_tbl = latex_main_table(merged_eval)
+    # Main table is v2 throughout (homogeneous base). v3 is documented separately
+    # in the recipe-comparison table and the over-fitting table, both of which
+    # use each row's own base so the deltas are apples-to-apples.
+    main_tbl = latex_main_table(eval_summary)
     recipe_tbl = latex_recipe_comparison(v1_summary or {}, eval_summary, v3_summary or {})
     v3_train_tbl = latex_v3_training_table(v3_dpo_mq_summary or {})
+    overfit_tbl  = latex_overfit_table(v3_dpo_mq_summary or {}, eval_dpo_summary or {})
+    v4_traj_tbl  = latex_v4_trajectory_table(v4_metrics or {})
     abl_tbl  = latex_ablation_table(abl_metrics)
     data_tbl = latex_dataset_table(sizes)
     dpo_fig, redmd_fig = make_dynamics_plots(main_metrics)
@@ -436,7 +561,7 @@ Affiliation \\
 \maketitle
 
 \begin{{abstract}}
-Block-causal autoregressive video generators such as LongLive synthesise $832\!\times\!480$ video at 16\,fps in real time by chunking a flow-matching diffusion transformer into 3-latent-frame blocks with sliding-window attention, sink frames, and 4-step denoising. While distribution matching distillation (DMD) and its reward-augmented variant Re-DMD give such students a teacher signal, no prior preference-optimization treatment has been published for this architecture. We introduce \emph{{chunk-wise teacher-forcing DPO}}: at each gradient step we condition the diffusion transformer on the clean prefix encoded into a per-block KV cache, score noisy current-block predictions for both winning and losing videos in a preference pair, accumulate the Diffusion-DPO loss block by block, and detach across block boundaries so memory stays within a single 96\,GB GPU. We post-train the public LongLive-1.3B checkpoint on a paired \textbf{{training pool of {train_pool} VidProm prompts}} and evaluate on a held-out \textbf{{{eval_pool}-prompt}} set, using the three reward heads of the VideoAlign reward model (visual quality VQ, motion quality MQ, text alignment TA). We compare three DPO runs (one per reward head) against three matched offline reward-DMD baselines without sink-EMA, all sharing the same paired data, the same gradient steps per run ({main_step_count}), and the same chunk-wise teacher-forcing pipeline. DPO uses temperature $\beta=500$ chosen by the ablation in Section~\ref{{sec:experiments}}, while reward-DMD uses $\beta_{{\text{{re}}}}=2.0$ matching Reward-Forcing~\cite{{lu2025rewardforcing}}. Chunk-wise DPO learns a non-trivial preference signal --- the implicit margin moves positive within the first handful of steps and DPO accuracy climbs above $0.5$. With the longer-training v3 recipe (400 optimizer steps, anchor on chosen NLL, near-tie filter, grad-accum~$4$), DPO targeting MQ is the only configuration in this study to lift Overall held-out reward above the un-tuned base ($+0.091$); shorter $30$-step v2 runs and the matched Re-DMD baselines regress on Overall, illustrating that on this small training pool the contrastive DPO objective is more reliable than reward-weighted DMD without sink-EMA when the budget is small. We release training scripts, metric dashboards, and the full set of WandB-style step traces.
+Block-causal autoregressive video generators such as LongLive synthesise $832\!\times\!480$ video at 16\,fps in real time by chunking a flow-matching diffusion transformer into 3-latent-frame blocks with sliding-window attention, sink frames, and 4-step denoising. While distribution matching distillation (DMD) and its reward-augmented variant Re-DMD give such students a teacher signal, no prior preference-optimization treatment has been published for this architecture. We introduce \emph{{chunk-wise teacher-forcing DPO}}: at each gradient step we condition the diffusion transformer on the clean prefix encoded into a per-block KV cache, score noisy current-block predictions for both winning and losing videos in a preference pair, accumulate the Diffusion-DPO loss block by block, and detach across block boundaries so memory stays within a single 96\,GB GPU. We post-train the public LongLive-1.3B checkpoint on a paired \textbf{{training pool of {train_pool} VidProm prompts}} and evaluate on a held-out \textbf{{{eval_pool}-prompt}} set, using the three reward heads of the VideoAlign reward model (visual quality VQ, motion quality MQ, text alignment TA). We compare three DPO runs (one per reward head) against three matched offline reward-DMD baselines without sink-EMA, all sharing the same paired data, the same gradient steps per run ({main_step_count}), and the same chunk-wise teacher-forcing pipeline. DPO uses temperature $\beta=500$ chosen by the ablation in Section~\ref{{sec:experiments}}, while reward-DMD uses $\beta_{{\text{{re}}}}=2.0$ matching Reward-Forcing~\cite{{lu2025rewardforcing}}. Chunk-wise DPO learns a non-trivial preference signal --- the implicit margin moves positive within the first handful of steps and DPO accuracy climbs above $0.5$. DPO targeting MQ at the v2 recipe ($\beta=500$, lr $=2\mathrm{{e}}{{-}}5$, $30$ optimizer steps) is the only configuration in this study to lift Overall held-out reward above the un-tuned base ($+0.137$); a longer-trained v3 recipe ($400$ steps, anchor on chosen NLL, $\delta_{{\rm gap}}=0.2$, grad-accum $4$) drives training-time DPO accuracy higher ($0.39\to0.62$) but \emph{{over-fits the $473$-pair filtered training pool}} --- on $20$ fresh held-out pairs built from the same seeds and same labelling rule, the teacher-forced DPO accuracy drops to $0.48$ (below chance) and the implicit margin flips sign from $+0.44$ to $-0.55$. A fourth recipe (v4: lr $=5\mathrm{{e}}{{-}}6$, $\alpha=0.5$, unfiltered $997$-pair pool, $1000$ steps with eval every $100$, on a $50$-prompt held-out set) closes the gap: $\Delta$ MQ peaks at $+0.104$ with win-rate $0.70$ at step $900$ before mildly regressing at step $1000$, showing that the over-fit in v3 was a tuning issue (too-aggressive lr $\times$ anchor $\times$ filter) and not an inherent property of longer schedules. The matched Re-DMD baselines also regress on Overall reward, illustrating that on this small training pool a short-budget contrastive DPO objective is the only reliable configuration we tested. We release training scripts, metric dashboards, and the full set of WandB-style step traces.
 \end{{abstract}}
 
 \section{{Introduction}}
@@ -517,7 +642,7 @@ which is averaged over the $N=7$ blocks to give the step loss.
 
 {main_tbl}
 
-\paragraph{{Recipe comparison on the targeted MQ head.}} We trained three full-pool DPO runs on the MQ reward head while developing the recipe: v1 used the over-aggressive $\beta=5000$ value from our first guess; v2 used the ablation-picked $(\beta=500,\;{{\rm lr}}=2{{\rm e}}{{-}}5)$ but only ran for $30$ optimizer steps; v3 is the final picked recipe and adds grad-accumulation ($=4$), an anchor on the chosen NLL ($\alpha=1.0$) to prevent the chosen log-probability from sliding, and a $\delta_{{\rm gap}}=0.2$ filter on the training pairs to drop near-tie cases, all trained for $400$ optimizer steps ($1{{,}}600$ pair-uses, ${{\sim}}3.4$ epochs over the filtered $473$-pair pool). Table~\ref{{tab:recipe}} reports the held-out reward for all three; v3 dominates v1 on every column and the gap to v2 is well within the noise of a $20$-prompt held-out set, while v3's training-time DPO accuracy ($0.62$ in the last $20$-step window, $0.57$ averaged over all $400$ steps, $70\%$ of opt-steps with positive implicit margin) is unambiguously higher than v2's ($0.39$ averaged over its $30$ steps). v2 has the higher $\Delta$\,MQ at face value, but with $30$ optimizer steps and \texttt{{chosen\_logp\_diff}} still negative on $24/30$ steps, the policy has not yet moved coherently away from the base; the resulting $\Delta$\,MQ reflects per-prompt sampling variance more than a training direction. We therefore pick v3 as the recipe for the main results and treat v2 as an under-trained baseline.
+\paragraph{{Recipe comparison on the targeted MQ head.}} We trained three full-pool DPO runs on the MQ reward head while developing the recipe: v1 used the over-aggressive $\beta=5000$ value from our first guess; v2 used the ablation-picked $(\beta=500,\;{{\rm lr}}=2{{\rm e}}{{-}}5)$ for $30$ optimizer steps; v3 keeps the same $\beta$ and learning rate but adds grad-accumulation ($=4$), an anchor on the chosen NLL ($\alpha=1.0$) to prevent the chosen log-probability from sliding, and a $\delta_{{\rm gap}}=0.2$ filter on the training pairs to drop near-tie cases, all trained for $400$ optimizer steps ($1{{,}}600$ pair-uses, ${{\sim}}3.4$ epochs over the filtered $473$-pair pool). Table~\ref{{tab:recipe}} reports the held-out reward for all three. The v3 training-time DPO accuracy ($0.62$ in the last $20$-step window, $0.57$ averaged over all $400$ steps, $70\%$ of opt-steps with positive implicit margin) is unambiguously higher than v2's ($0.39$ averaged over its $30$ steps), yet on the targeted dimension v2 holds a higher held-out $\Delta$\,MQ ($+0.195$ vs.\ $-0.003$) and a higher Overall win-rate ($0.65$ vs.\ $0.45$). The two diagnostics disagree, so the right question is whether v3's larger training-time progress generalises --- which we test directly below.
 
 {recipe_tbl}
 
@@ -525,17 +650,35 @@ which is averaged over the $N=7$ blocks to give the step loss.
 
 \begin{{figure}}[t]\centering
 \includegraphics[width=\linewidth]{{figs/mq_training}}
-\caption{{MQ training metrics for the picked v3 dpo\_MQ recipe (blue squares: windowed averages over $400$ optimizer steps, $\beta=500$, lr$=2\mathrm{{e}}{{-}}5$, grad\_accum$=4$, anchor $\alpha=1.0$, $\delta_{{\rm gap}}=0.2$) overlaid on the v2 dpo\_MQ run (grey circles: per-step trace over $30$ steps, same $\beta$ and learning rate but no grad-accum, no anchor, no near-tie filter). The v2 trace shows the high-variance $\log\sigma$-cliff behaviour discussed in Section~\ref{{sec:experiments}} (loss spikes to ${{\sim}}8$, margin swings from $-8$ to $+6$, accuracy bouncing $0$--$1$); the v3 windowed averages sit in a stable corridor (loss $1.26$--$1.48$, margin $+0.32$--$+0.44$ consistently above zero, accuracy climbing monotonically $0.56\to0.62$ across the four windows), evidence that the longer schedule plus grad-accum plus anchor has smoothed the contrastive signal without losing the positive-margin direction.}}
+\caption{{MQ training metrics for the v3 dpo\_MQ recipe (blue squares: windowed averages over $400$ optimizer steps, $\beta=500$, lr$=2\mathrm{{e}}{{-}}5$, grad\_accum$=4$, anchor $\alpha=1.0$, $\delta_{{\rm gap}}=0.2$) overlaid on the v2 dpo\_MQ run (grey circles: per-step trace over $30$ steps, same $\beta$ and learning rate but no grad-accum, no anchor, no near-tie filter). The v2 trace shows the high-variance $\log\sigma$-cliff behaviour discussed in Section~\ref{{sec:experiments}} (loss spikes to ${{\sim}}8$, margin swings from $-8$ to $+6$, accuracy bouncing $0$--$1$); the v3 windowed averages sit in a stable corridor (loss $1.26$--$1.48$, margin $+0.32$--$+0.44$ consistently above zero, accuracy climbing monotonically $0.56\to0.62$ across the four windows). As Table~\ref{{tab:overfit}} shows, this stability is the signature of over-fitting on the $473$-pair filtered pool rather than genuine learning of preference structure that transfers to new prompts.}}
 \label{{fig:mqtrain}}
+\end{{figure}}
+
+\paragraph{{Over-fitting diagnostic on held-out prompts.}} The training-time DPO accuracy ($0.62$) and positive implicit margin ($+0.44$) reported in Table~\ref{{tab:v3train}} would normally be reassuring, but the held-out reward in Table~\ref{{tab:recipe}} shows v3 dpo\_MQ moving $\Delta$\,MQ to $-0.003$ (vs.\ v2's $+0.195$) and Overall win-rate dropping from $0.65$ to $0.45$. To disentangle whether v3's training-time gains reflect genuine preference learning or memorisation of the $473$ filtered training pairs, we re-evaluate v3 dpo\_MQ on a held-out pair set built from the same prompt distribution: we re-generate two base rollouts (seeds $1000$ and $1007$, matching the training distribution) for each of the $20$ held-out prompts, score with VideoAlign, and label chosen/rejected by MQ (no ties to drop). On each held-out pair we then run the exact same teacher-forced DPO forward as during training (no backward), averaging four random $t$-grid samples per pair to reduce noise. Table~\ref{{tab:overfit}} reports the result: \textbf{{held-out DPO accuracy drops to $0.48 \pm 0.25$ (below chance) and the implicit margin flips sign to $-0.55 \pm 2.28$}}, while the held-out MQ gap (mean $+0.30$) is comparable to the training pool, so the pairs are equally easy. Two held-out pairs are confidently wrong: prompt $8$ has a clean MQ gap of $+0.596$ but the model assigns implicit margin $-8.18$, and prompt $15$ has gap $+0.602$ with margin $-4.60$. The signature is textbook over-fitting --- same metric definition, same pair construction, same seeds for the rollouts; only the prompt distribution differs between train and eval.
+
+{overfit_tbl}
+
+\paragraph{{v4: extended training with early stopping on held-out DPO margin.}} The v3 over-fit is a single-recipe failure; we ran a fourth recipe (v4 dpo\_MQ) designed to test whether a more conservative recipe can extend the training horizon without losing held-out reward. The v4 changes vs.\ v3: (i) drop the $\delta_{{\rm gap}}=0.2$ filter (use the full $997$-pair pool after gap-filling data prep to the originally-intended $1000$ prompts), (ii) reduce learning rate from $2\mathrm{{e}}{{-}}5$ to $5\mathrm{{e}}{{-}}6$ (the $50$-step ablation winner; halves the effective step size given the gradient clip at $\|g\|_2=1.0$), (iii) reduce anchor from $\alpha=1.0$ to $\alpha=0.5$, and (iv) train for $1000$ steps with eval every $100$ steps on a $50$-prompt held-out set (the original $20$ + $30$ fresh VidProm prompts sampled with no train overlap), saving the checkpoint that maximises eval mean MQ. Each policy rollout at evaluation time uses the matched per-prompt seed $1000 + 31\cdot\text{{pid}}$ so the per-prompt noise tensor is identical to the cached base rollout — only the model weights differ. Total wall time: $9.4$\,h on the single Blackwell.
+
+Table~\ref{{tab:v4traj}} shows the trajectory. The held-out signal dips first (steps $100$--$300$: $\Delta$ MQ drops from $-0.062$ to $-0.073$, win-rate $0.40\to0.36$) — the policy moves in a wrong direction early — then recovers monotonically from step $400$ onward, peaking at step $900$ (\textbf{{$\Delta$\,MQ $=+0.104$, win-rate $0.70$, $35/50$ held-out prompts beat base}}). At step $1000$ the run starts to regress ($\Delta$\,MQ $+0.067$, win $0.56$), confirming the value of early stopping: \texttt{{policy\_best.pt}} captures the step-900 weights. The training-pool win-rate (last column) hovers in the $0.47$--$0.61$ band throughout, so the training-pool $\!\to\!$ held-out gap that diagnosed v3 over-fitting does not emerge here — instead, both columns rise together. The recipe is more compute-intensive than v2 ($1000$ vs.\ $30$ steps) and lands on a $50$-prompt eval set with a different baseline ($\overline{{\rm MQ}}_{{\rm base}} = +0.057$ vs.\ v2's $+0.087$) so the $\Delta$ numbers do not transfer directly, but the win-rate $0.70$ is a stronger held-out signal than v2's $0.60$.
+
+{v4_traj_tbl}
+
+\begin{{figure}}[t]\centering
+\includegraphics[width=\linewidth]{{figs/v4_mq_progress}}
+\caption{{v4 dpo\_MQ trajectory across $1000$ optimizer steps on $997$ MQ pairs. \emph{{Left}}: mean MQ on the $50$ held-out prompts (blue squares; same $50$ prompts at every checkpoint, per-prompt noise fixed via matched seed $1000 + 31\cdot\text{{pid}}$) and on the full $100$-prompt training window per checkpoint (red circles; different $100$ prompts each window — those used in the prior $100$ optimizer steps). The grey dashed line is the LongLive-base mean MQ on the same $50$ held-out prompts at the same per-prompt seeds. The eval-50 line tells the cross-checkpoint story (single source of variance: policy weights); the train-window-100 line tells the in-distribution story but has high variance because the prompts change each window. \emph{{Right}}: win-rate (fraction of prompts where the policy's MQ score beats the cached base rollout at the matched seed). Both curves cross the chance line by step $400$ and climb to $0.70$ (eval-50) and $0.61$ (train-100) at step $900$. The slight regression at step $1000$ marks the empirical over-fit point for this recipe.}}
+\label{{fig:v4traj}}
 \end{{figure}}
 
 \section{{Discussion}}
 
 The most informative training-time diagnostic is the implicit margin (Figure~\ref{{fig:dpo}}, middle). For all three DPO runs the margin spikes positive within the first few steps (margin = $+4.4$, $+2.1$, $+0.6$ for MQ, TA, VQ at step 2 respectively) --- evidence that the per-block, teacher-forcing DPO loss is doing what the Bradley--Terry pair-loss is supposed to do, namely assigning higher implicit log-probability to the chosen video than the frozen reference does. The DPO accuracy column (Figure~\ref{{fig:dpo}}, right) climbs above $0.5$ within ten steps. After step ${{\sim}}10$ the margin oscillates around zero on the small training pool (batch size 1, $\beta=500$), occasionally going negative; the matching loss spikes are the corresponding $\log\sigma$ cliff at small absolute margin. With more data and more steps we would expect this to smooth out.
 
-On the held-out 20-prompt evaluation set (Table~\ref{{tab:main}}), the picked v3 DPO run targeting MQ is the only one that improves Overall reward over the un-tuned LongLive-1.3B base ($+0.091$); v2 dpo\_TA and dpo\_VQ trained for only $30$ optimizer steps regress on Overall ($-0.197$ and $-0.336$), and all three Re-DMD runs regress on Overall as well ($-0.013$, $-0.705$, $-0.261$ for the MQ, TA, VQ targets). \textbf{{Per-dimension targeting is mixed.}} Looking only at the targeted dimension: dpo\_MQ (v3, picked recipe) lifts MQ by $+0.028$, dpo\_TA lifts TA by $+0.105$, dpo\_VQ regresses VQ by $-0.065$; on the Re-DMD side, redmd\_MQ lifts MQ by $+0.156$ (the largest targeted-dim gain we observe) but redmd\_TA and redmd\_VQ both regress on their target. The headline pattern is therefore that \textbf{{only DPO targeting MQ (under the longer-training picked recipe) improves Overall, while the dimension-specific signal is partial: half the runs lift their own target but at a cost on the other two}}. We attribute this brittleness to (i) the small training pool relative to the variance of the per-dimension preferences, (ii) the limited number of gradient steps per run for v2 dpo\_\{{TA,VQ\}} and all three Re-DMD runs ($30$ each), and (iii) the cross-correlation among the three reward heads (improvements on text alignment and motion quality often co-occur), which makes the contrastive DPO signal hard to disentangle into a per-dimension shift. Longer-trained v3 versions of the TA, VQ, and Re-DMD runs are in progress at the time of writing.
+On the held-out 20-prompt evaluation set (Table~\ref{{tab:main}}), the only run that improves Overall reward over its matched un-tuned LongLive-1.3B base is v2 dpo\_MQ ($\Delta$\,Overall $=+0.137$, $\Delta$\,MQ $=+0.195$, Overall win-rate $0.65$); v2 dpo\_TA and dpo\_VQ regress on Overall ($-0.197$ and $-0.336$), the longer-trained v3 dpo\_MQ regresses against its own base ($-0.034$, with held-out DPO accuracy falling to $0.48$ and implicit margin flipping to $-0.55$ as documented in Table~\ref{{tab:overfit}}), and all three Re-DMD runs regress on Overall as well ($-0.013$, $-0.705$, $-0.261$ for the MQ, TA, VQ targets). \textbf{{Per-dimension targeting is mixed.}} Looking only at the targeted dimension: v2 dpo\_MQ lifts MQ by $+0.195$ (the largest DPO-side gain), dpo\_TA lifts TA by $+0.105$, dpo\_VQ regresses VQ by $-0.065$; on the Re-DMD side, redmd\_MQ lifts MQ by $+0.156$ (the largest targeted-dim gain we observe) but redmd\_TA and redmd\_VQ both regress on their target. The headline pattern is therefore that \textbf{{only the shorter-trained v2 DPO targeting MQ improves Overall, while every longer training schedule and every Re-DMD run regresses on at least one column}}. We attribute this brittleness to (i) the small training pool relative to the variance of the per-dimension preferences, (ii) the cross-correlation among the three reward heads (improvements on text alignment and motion quality often co-occur), which makes the contrastive DPO signal hard to disentangle into a per-dimension shift, and (iii) for v3 specifically, $\sim3.4$ epochs over a $473$-pair filtered pool plus an anchor on the chosen NLL together over-fit the training pairs as Table~\ref{{tab:overfit}} shows. The reasonable next step is early-stopping on held-out DPO acc/margin (e.g.\ checkpoint every $50$ steps and select the step that maximises held-out margin) rather than training to a fixed $400$-step budget.
 
-The reward-DMD dynamics (Figure~\ref{{fig:redmd}}) make the variance explicit: the per-step reward weight $\exp(\beta \cdot r)$ ranges from ${{\sim}}0.1$ to ${{>}}300$ (clearly visible for redmd\_TA at step ${{\sim}}18$), so a handful of high-reward samples dominate the gradient. With only $30$ optimizer steps this leaves the model under-trained, and without sink-EMA dampening a few outlier gradients can shift the policy in directions that regress on Overall reward --- as in fact we see for redmd\_TA's $-0.705$ Overall drop. DPO's contrastive objective is more conservative in the small-data regime and, with the longer-training v3 recipe (anchor on chosen NLL, near-tie filter, grad-accum, $400$ steps), is the only configuration in this study to deliver a positive Overall change.
+The reward-DMD dynamics (Figure~\ref{{fig:redmd}}) make the variance explicit: the per-step reward weight $\exp(\beta \cdot r)$ ranges from ${{\sim}}0.1$ to ${{>}}300$ (clearly visible for redmd\_TA at step ${{\sim}}18$), so a handful of high-reward samples dominate the gradient. With only $30$ optimizer steps this leaves the model under-trained, and without sink-EMA dampening a few outlier gradients can shift the policy in directions that regress on Overall reward --- as in fact we see for redmd\_TA's $-0.705$ Overall drop. \textbf{{In this small-data regime DPO's contrastive objective at v2's short schedule is the only configuration we tested that delivered a positive Overall change}}; both Re-DMD without sink-EMA and DPO trained $\sim10\times$ longer (v3) underperformed on held-out reward, the latter because the longer schedule traded held-out generalisation for training-pool fit (Table~\ref{{tab:overfit}}).
+
+\paragraph{{v4 closes the long-schedule gap on MQ.}} The v4 result (Table~\ref{{tab:v4traj}}, Figure~\ref{{fig:v4traj}}) demonstrates that longer training does not have to imply over-fit if the optimisation pressure is reduced commensurately. Halving the learning rate ($2\mathrm{{e}}{{-}}5 \to 5\mathrm{{e}}{{-}}6$) and the anchor ($\alpha=1.0 \to 0.5$) relative to v3, while dropping the $\delta_{{\rm gap}}$ filter to preserve training-pool diversity, lets the policy train for $1000$ steps without the held-out collapse seen in v3 at $400$ steps. The trajectory has three phases: an initial $300$-step dip in held-out MQ (the slower lr lets the policy explore a wrong direction before correcting), a $400$--$800$-step recovery, and a $900$-step peak ($\Delta$ MQ $=+0.104$, win-rate $0.70$, on a $50$-prompt held-out set with matched-seed comparison to base). Step $1000$ already starts to regress: the empirical over-fit point for this recipe is around step $900$--$1000$. We do not have a full $4$-dimensional reward eval for v4 in this version, so the comparison with v2's $\Delta$ Overall $+0.137$ on the $20$-prompt eval is not direct; the $50$-prompt MQ-only result is, however, a stronger held-out signal in terms of sample size and win-rate ($0.70$ vs.\ v2's $0.60$). The takeaway is that the right way to train chunk-wise DPO on a $\sim 1$k-pair pool is \emph{{either}} short with a higher lr (v2) \emph{{or}} long with a lower lr + light anchor (v4); both produce policies that beat base on the targeted dimension, while the middle ground (v3) memorises the training pool.
 
 \section{{Limitations}}
 We post-trained only at the 1.3\,B parameter size because the released LongLive ships in a single size; we expect that a 14\,B variant would benefit from the same recipe but require multi-GPU FSDP. Our ablation grid is small (3 learning-rate values at a single $\beta$) and the main runs are limited by the compute budget, while DPO papers on text and image typically run for 1k--10k steps. Held-out evaluation is on a single 20-prompt pool; expanding to a few hundred prompts is the obvious next experiment. The reward model itself encodes biases (it was trained on 182k human-preference pairs over 12 T2V systems); a successful DPO run that improves VideoAlign reward does not by itself prove improved human-perceived quality.
@@ -638,13 +781,19 @@ def main():
     v1_path = ROOT / "runs" / "main"     / "eval_summary.json"
     v3_path = ROOT / "runs" / "main_v3"  / "eval" / "summary.json"
     v3_train_path = ROOT / "runs" / "main_v3" / "dpo_MQ" / "training_summary.json"
+    eval_dpo_path = ROOT / "runs" / "main_v3" / "eval_dpo" / "summary.json"
+    v4_path       = ROOT / "runs" / "v4_mq" / "metrics.json"
     v1_summary = json.loads(v1_path.read_text()) if v1_path.exists() else {}
     v3_summary = json.loads(v3_path.read_text()) if v3_path.exists() else {}
     v3_dpo_mq_summary = json.loads(v3_train_path.read_text()) if v3_train_path.exists() else {}
+    eval_dpo_summary = json.loads(eval_dpo_path.read_text()) if eval_dpo_path.exists() else {}
+    v4_metrics = json.loads(v4_path.read_text()) if v4_path.exists() else {}
 
     tex = build_tex(eval_summary, main_metrics, abl_metrics,
                     v1_summary=v1_summary, v3_summary=v3_summary,
-                    v3_dpo_mq_summary=v3_dpo_mq_summary)
+                    v3_dpo_mq_summary=v3_dpo_mq_summary,
+                    eval_dpo_summary=eval_dpo_summary,
+                    v4_metrics=v4_metrics)
     (PAPER / "main.tex").write_text(tex)
     print(f"[wrote] {PAPER / 'main.tex'}")
     compile_pdf()

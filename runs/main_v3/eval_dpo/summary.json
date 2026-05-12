@@ -1,0 +1,25 @@
+{
+  "n_pairs": 20,
+  "policy": "runs/main_v3/dpo_MQ/policy_final.pt",
+  "reward_dim": "MQ",
+  "beta": 500.0,
+  "num_t_samples_per_pair": 4,
+  "dpo_accuracy": {
+    "mean": 0.4803571428571428,
+    "std": 0.25215272137726213
+  },
+  "dpo_margin": {
+    "mean": -0.5535404769770268,
+    "std": 2.2841624462111385
+  },
+  "dpo_loss": {
+    "mean": 1.889282112330894,
+    "std": 1.8869330387159928
+  },
+  "MQ_gap": {
+    "mean": 0.30291751140395334,
+    "std": 0.22414872124006455
+  },
+  "win_rate_acc>0.5": 0.4,
+  "win_rate_margin>0": 0.45
+}
