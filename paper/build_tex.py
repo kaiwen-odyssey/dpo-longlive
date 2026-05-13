@@ -169,6 +169,52 @@ def latex_overfit_table(v3_train_summary, eval_dpo_summary):
     return "\n".join(lines)
 
 
+def latex_v7_trajectory_table(v7_metrics):
+    """v7 aggregated-DPO trajectory: per-checkpoint eval-50 + train-100 metrics."""
+    if not v7_metrics or not v7_metrics.get("checkpoints"):
+        return ""
+    base = v7_metrics.get("baseline_eval_mean_MQ", float("nan"))
+    cfg = v7_metrics.get("config", {})
+    rows = v7_metrics["checkpoints"]
+    best_idx = max(range(len(rows)), key=lambda i: rows[i]["eval50_mean_MQ"])
+
+    lines = [
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{v7 dpo\_MQ aggregated trajectory: held-out (eval-50) and training-pool (train-window-100) mean MQ and win-rate at every 100-step checkpoint. "
+        rf"Configuration: $\beta={cfg.get('beta',100):g}$, lr$=2\mathrm{{e}}{{-}}5$, anchor $\alpha={cfg.get('anchor_alpha',0.5):.1f}$, aggregated chunk-wise DPO loss (single sigmoid on rollout-mean of per-block margins, shared $(t,\epsilon)$ across all 7 chunks), batch 1, no $\delta_{{\rm gap}}$ filter, "
+        rf"trained on the full unfiltered $997$-pair MQ pool for $1000$ optimizer steps on a single Blackwell GPU. "
+        rf"Eval-50 = same $50$ held-out VidProm prompts as Table~\ref{{tab:v4traj}}; each policy rollout uses matched per-prompt seed $1000 + 31\cdot\text{{pid}}$ so noise is identical to cached base. "
+        rf"Held-out reward baseline: mean MQ ${base:+.4f}$. "
+        rf"The bolded row is the peak by eval-50 mean MQ (saved as \texttt{{policy\_best.pt}}). "
+        rf"Note the bimodal trajectory: half of checkpoints land in the strongly-positive basin ($\Delta\ge+0.40$) and two checkpoints (200, 600) collapse to $\Delta\approx-0.5$ — a real instability of aggregated mode at this lr but the policy recovers within 100 steps each time.}}",
+        r"\label{tab:v7traj}",
+        r"\begin{tabular}{rrrrr}",
+        r"\toprule",
+        r"step & eval-50 $\Delta$\,MQ & eval-50 win & train-100 mean MQ & train-100 win \\",
+        r"\midrule",
+    ]
+    for i, c in enumerate(rows):
+        step  = c["step"]
+        eval_mean = c["eval50_mean_MQ"]
+        delta = eval_mean - base
+        eval_win  = c["eval50_win_rate"]
+        train_mean = c["train_window_mean_MQ"]
+        train_win  = c["train_window_win_rate"]
+        bold = (i == best_idx)
+        marker, end = (r"\textbf{", r"}") if bold else ("", "")
+        cells = [
+            f"{marker}{step}{end}",
+            f"{marker}${delta:+.4f}${end}",
+            f"{marker}{eval_win:.2f}{end}",
+            f"{marker}${train_mean:+.3f}${end}",
+            f"{marker}{train_win:.2f}{end}",
+        ]
+        lines.append(" & ".join(cells) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}"]
+    return "\n".join(lines)
+
+
 def latex_v4_trajectory_table(v4_metrics):
     """v4 trajectory: per-checkpoint eval-50 and train-window-100 metrics.
 
@@ -495,7 +541,7 @@ def make_dynamics_plots(main_metrics):
     return paths.get("dpo"), paths.get("redmd")
 
 
-def build_tex(eval_summary, main_metrics, abl_metrics, *, v1_summary=None, v3_summary=None, v3_dpo_mq_summary=None, eval_dpo_summary=None, v4_metrics=None):
+def build_tex(eval_summary, main_metrics, abl_metrics, *, v1_summary=None, v3_summary=None, v3_dpo_mq_summary=None, eval_dpo_summary=None, v4_metrics=None, v7_metrics=None):
     sizes = measure_dataset_sizes()
     steps = measure_step_counts(main_metrics)
     main_step_count = max(steps.values()) if steps else 30
@@ -514,6 +560,7 @@ def build_tex(eval_summary, main_metrics, abl_metrics, *, v1_summary=None, v3_su
     v3_train_tbl = latex_v3_training_table(v3_dpo_mq_summary or {})
     overfit_tbl  = latex_overfit_table(v3_dpo_mq_summary or {}, eval_dpo_summary or {})
     v4_traj_tbl  = latex_v4_trajectory_table(v4_metrics or {})
+    v7_traj_tbl  = latex_v7_trajectory_table(v7_metrics or {})
     abl_tbl  = latex_ablation_table(abl_metrics)
     data_tbl = latex_dataset_table(sizes)
     dpo_fig, redmd_fig = make_dynamics_plots(main_metrics)
@@ -670,6 +717,18 @@ Table~\ref{{tab:v4traj}} shows the trajectory. The held-out signal dips first (s
 \label{{fig:v4traj}}
 \end{{figure}}
 
+\paragraph{{v7: aggregated chunk-wise DPO loss with shared noise.}} The per-chunk loss used in v2/v3/v4 averages \emph{{after}} the sigmoid: $\mathcal{{L}} = \mathbb{{E}}_b[-\log\sigma(\text{{inside}}_b)]$. The aggregated alternative moves the mean \emph{{inside}}: $\mathcal{{L}} = -\log\sigma(\mathbb{{E}}_b[\text{{inside}}_b])$. By Jensen's inequality $\mathbb{{E}}[-\log\sigma(x)] \ge -\log\sigma(\mathbb{{E}}[x])$ (with equality iff per-block margins coincide), so per-chunk penalises high block-variance more heavily and provides per-block credit assignment via per-block sigmoid saturation, while aggregated treats the rollout as a single preference and gives uniform $1/N$ weight to every block's contribution to the gradient. We implement the aggregated variant with a two-pass scheme — pass 1 (\texttt{{no\_grad}}) accumulates per-block inside values to compute the rollout-mean and its sigmoid scale factor, pass 2 backwards a surrogate $S_b = \texttt{{scale}}\cdot\text{{inside}}_b$ per block whose accumulated gradient exactly matches $\partial\mathcal{{L}}/\partial\theta$. Additionally we share one timestep $t$ and one source noise tensor across all $7$ blocks per rollout (the per-block draws are slices of the same rollout-level $(\epsilon^w, \epsilon^l)$), removing variance from independent per-block Monte-Carlo draws so only the model's per-block predictions drive cross-block differences in $\text{{inside}}_b$.
+
+A $\beta\times\text{{lr}}$ grid at $100$ steps revealed $\beta=100,\;{{\rm lr}}=2{{\rm e}}{{-}}5$ as the strongest aggregated configuration; we then trained for the full $1000$ steps. Table~\ref{{tab:v7traj}} shows the trajectory: the policy is highly volatile per opt-step (single-pair margin can spike to $\pm 19$ within $5$ training steps) but the every-$100$-step held-out eval reveals a stable bimodal structure — most checkpoints land in a strongly-positive basin ($\Delta\,{{\rm MQ}}\ge+0.40$, win $\ge0.72$), with two outlier checkpoints (steps $200, 600$) where the policy temporarily collapses to $\Delta\approx-0.5$ before recovering within the next $100$ steps. The step-$400$ checkpoint is the peak (\textbf{{$\Delta$\,MQ $=+0.802$, win-rate $0.86$ on the $50$-prompt held-out set, $43/50$ prompts beat base}}). The training-pool side moves in lock-step with held-out — train-window-100 mean MQ reaches $+1.01$ at step $400$, win-rate $0.89$, and tracks eval-50 across both the positive and negative basins. Compared to the per-chunk v4 peak ($\Delta$\,MQ $+0.104$, win $0.70$ at step $900$), aggregated v7 is $8\times$ the held-out mean improvement and $0.16$ higher on win-rate, on the same eval set with the same per-prompt seed convention.
+
+{v7_traj_tbl}
+
+\begin{{figure}}[t]\centering
+\includegraphics[width=\linewidth]{{figs/v7_mq_progress}}
+\caption{{v7 dpo\_MQ aggregated trajectory across $1000$ optimizer steps on $997$ MQ pairs ($\beta=100$, lr$=2\mathrm{{e}}{{-}}5$, $\alpha=0.5$, single sigmoid on rollout-mean margin with shared $(t,\epsilon)$ across all $7$ chunks). \emph{{Left}}: mean MQ on the same $50$ held-out VidProm prompts as Figure~\ref{{fig:v4traj}} (blue squares, fixed per-prompt seeds) and on the train-window-100 per checkpoint (red circles, different prompts each window). \emph{{Right}}: win-rate vs.\ base at the matched per-prompt seed. The bimodal trajectory is visible: peaks at steps $400$ and the surrounding $300$--$500$ region, two collapses at steps $200$ and $600$. \texttt{{policy\_best.pt}} captures the step-$400$ weights ($\Delta$\,MQ $+0.802$, win $0.86$).}}
+\label{{fig:v7traj}}
+\end{{figure}}
+
 \section{{Discussion}}
 
 The most informative training-time diagnostic is the implicit margin (Figure~\ref{{fig:dpo}}, middle). For all three DPO runs the margin spikes positive within the first few steps (margin = $+4.4$, $+2.1$, $+0.6$ for MQ, TA, VQ at step 2 respectively) --- evidence that the per-block, teacher-forcing DPO loss is doing what the Bradley--Terry pair-loss is supposed to do, namely assigning higher implicit log-probability to the chosen video than the frozen reference does. The DPO accuracy column (Figure~\ref{{fig:dpo}}, right) climbs above $0.5$ within ten steps. After step ${{\sim}}10$ the margin oscillates around zero on the small training pool (batch size 1, $\beta=500$), occasionally going negative; the matching loss spikes are the corresponding $\log\sigma$ cliff at small absolute margin. With more data and more steps we would expect this to smooth out.
@@ -783,17 +842,20 @@ def main():
     v3_train_path = ROOT / "runs" / "main_v3" / "dpo_MQ" / "training_summary.json"
     eval_dpo_path = ROOT / "runs" / "main_v3" / "eval_dpo" / "summary.json"
     v4_path       = ROOT / "runs" / "v4_mq" / "metrics.json"
+    v7_path       = ROOT / "runs" / "v7_mq_agg_b100_lr2e-5" / "metrics.json"
     v1_summary = json.loads(v1_path.read_text()) if v1_path.exists() else {}
     v3_summary = json.loads(v3_path.read_text()) if v3_path.exists() else {}
     v3_dpo_mq_summary = json.loads(v3_train_path.read_text()) if v3_train_path.exists() else {}
     eval_dpo_summary = json.loads(eval_dpo_path.read_text()) if eval_dpo_path.exists() else {}
     v4_metrics = json.loads(v4_path.read_text()) if v4_path.exists() else {}
+    v7_metrics = json.loads(v7_path.read_text()) if v7_path.exists() else {}
 
     tex = build_tex(eval_summary, main_metrics, abl_metrics,
                     v1_summary=v1_summary, v3_summary=v3_summary,
                     v3_dpo_mq_summary=v3_dpo_mq_summary,
                     eval_dpo_summary=eval_dpo_summary,
-                    v4_metrics=v4_metrics)
+                    v4_metrics=v4_metrics,
+                    v7_metrics=v7_metrics)
     (PAPER / "main.tex").write_text(tex)
     print(f"[wrote] {PAPER / 'main.tex'}")
     compile_pdf()

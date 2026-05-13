@@ -87,6 +87,8 @@ def main():
     ap.add_argument("--n_eval_prompts", type=int, default=50)
     ap.add_argument("--aggregate_chunks", action="store_true",
                     help="Aggregate per-block margins before sigmoid (single rollout-level DPO loss)")
+    ap.add_argument("--no_save_policy", action="store_true",
+                    help="Skip policy_best.pt and policy_final.pt writes (saves ~5 GB for grid runs)")
     ap.add_argument("--train_seed", type=int, default=0)
     ap.add_argument("--vidprom_seed", type=int, default=7)
     # Per-prompt seed = 1000 + 31*pid (matches data/pairs/ convention from gen_pairs.py).
@@ -292,12 +294,15 @@ def main():
         print(f"    train-100:  mean MQ {train_mean:+.4f}  win {train_win:.2f}  ({len(window_pairs)} prompts)")
         print(f"    eval took {eval_time/60:.1f} min")
 
-        # Save best-by-eval-MQ checkpoint
+        # Save best-by-eval-MQ checkpoint (unless --no_save_policy)
         if eval_mean > best_eval_mean_MQ:
             best_eval_mean_MQ = eval_mean
-            best_path = out_dir / "policy_best.pt"
-            torch.save(policy.state_dict(), best_path)
-            print(f"    [best] saved {best_path}  (eval mean MQ {eval_mean:+.4f})")
+            if not args.no_save_policy:
+                best_path = out_dir / "policy_best.pt"
+                torch.save(policy.state_dict(), best_path)
+                print(f"    [best] saved {best_path}  (eval mean MQ {eval_mean:+.4f})")
+            else:
+                print(f"    [best] step {step_id} (eval mean MQ {eval_mean:+.4f}) — policy save skipped")
 
         policy.train()
         return {
@@ -347,10 +352,13 @@ def main():
             with metrics_path.open("w") as fout:
                 json.dump(metrics_history, fout, indent=2)
 
-    # Save final policy
-    final_path = out_dir / "policy_final.pt"
-    torch.save(policy.state_dict(), final_path)
-    print(f"\n[final] saved {final_path}")
+    # Save final policy (unless --no_save_policy)
+    if not args.no_save_policy:
+        final_path = out_dir / "policy_final.pt"
+        torch.save(policy.state_dict(), final_path)
+        print(f"\n[final] saved {final_path}")
+    else:
+        print(f"\n[final] policy save skipped (--no_save_policy)")
     print(f"[final] best eval mean MQ = {best_eval_mean_MQ:+.4f} (baseline {base_eval_mean_MQ:+.4f})")
     print(f"[final] total wall time: {(time.time() - t_global)/3600:.2f} h")
 
